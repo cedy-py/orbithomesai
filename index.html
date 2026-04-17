@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OrbitHomes AI — Find Your Perfect Property</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --space: #060D18;
+    --deep: #0A2540;
+    --mid: #103560;
+    --cyan: #4DD9C0;
+    --cyan-dim: #2AA891;
+    --cyan-glow: rgba(77,217,192,0.15);
+    --white: #F0F6FF;
+    --muted: rgba(240,246,255,0.55);
+    --border: rgba(77,217,192,0.18);
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--space);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── STARFIELD ── */
+  #stars {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+  }
+  .star {
+    position: absolute; background: #fff; border-radius: 50%;
+    animation: twinkle var(--d, 3s) ease-in-out infinite var(--delay, 0s);
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: var(--lo, 0.1); }
+    50% { opacity: var(--hi, 0.7); }
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.1rem 3rem;
+    background: rgba(6,13,24,0.7);
+    backdrop-filter: blur(16px);
+    border-bottom: 0.5px solid var(--border);
+  }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--font-display); font-size: 20px; font-weight: 800;
+    color: var(--white); text-decoration: none; letter-spacing: -0.3px;
+  }
+  .logo-orbit {
+    width: 32px; height: 32px; position: relative; flex-shrink: 0;
+  }
+  .logo-orbit svg { width: 32px; height: 32px; }
+  .logo span { color: var(--cyan); }
+  .nav-links { display: flex; align-items: center; gap: 2rem; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 300;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    padding: 8px 20px; border-radius: 40px;
+    border: 1px solid var(--cyan); color: var(--cyan);
+    background: transparent; font-family: var(--font-body); font-size: 14px;
+    cursor: pointer; transition: all 0.2s; text-decoration: none;
+  }
+  .nav-cta:hover { background: var(--cyan); color: var(--space); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: grid; grid-template-columns: 1fr 1fr;
+    align-items: start;
+    padding: 7rem 3rem 5rem;
+    gap: 3rem;
+  }
+  .hero-text { max-width: 520px; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 400; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--cyan); margin-bottom: 1.5rem;
+  }
+  .hero-eyebrow::before {
+    content: ''; width: 24px; height: 1px; background: var(--cyan);
+  }
+  h1 {
+    font-family: var(--font-display); font-size: clamp(2.6rem, 5vw, 4rem);
+    font-weight: 800; line-height: 1.05; letter-spacing: -1.5px;
+    color: var(--white); margin-bottom: 1.5rem;
+  }
+  h1 em {
+    font-style: normal; color: var(--cyan);
+    position: relative; display: inline-block;
+  }
+  h1 em::after {
+    content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+    height: 2px; background: var(--cyan); opacity: 0.4; border-radius: 2px;
+  }
+  .hero-sub {
+    font-size: 17px; font-weight: 300; color: var(--muted);
+    line-height: 1.7; margin-bottom: 2.5rem; max-width: 400px;
+  }
+  .hero-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    padding: 13px 28px; border-radius: 40px;
+    background: var(--cyan); color: var(--space);
+    font-family: var(--font-body); font-weight: 500; font-size: 15px;
+    border: none; cursor: pointer; transition: all 0.2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { background: #6EE7D0; transform: translateY(-1px); }
+  .btn-ghost {
+    padding: 13px 28px; border-radius: 40px;
+    border: 1px solid rgba(240,246,255,0.2); color: var(--muted);
+    font-family: var(--font-body); font-weight: 300; font-size: 15px;
+    background: transparent; cursor: pointer; transition: all 0.2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--white); color: var(--white); }
+  .hero-stats {
+    display: flex; gap: 2rem; margin-top: 3rem;
+    padding-top: 2rem; border-top: 0.5px solid var(--border);
+  }
+  .stat-num {
+    font-family: var(--font-display); font-size: 26px; font-weight: 800;
+    color: var(--white); line-height: 1;
+  }
+  .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; font-weight: 300; }
+
+  /* ── CHAT WIDGET IN HERO ── */
+  .chat-container {
+    position: relative;
+    animation: floatUp 0.8s ease both 0.3s;
+  }
+  @keyframes floatUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .chat-glow {
+    position: absolute; inset: -30px;
+    background: radial-gradient(ellipse at center, rgba(77,217,192,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .chat-widget {
+    background: rgba(10,37,64,0.85);
+    border: 0.5px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    position: relative;
+    box-shadow: 0 0 60px rgba(77,217,192,0.08), 0 40px 80px rgba(0,0,0,0.4);
+  }
+  .chat-topbar {
+    background: rgba(16,53,96,0.6);
+    padding: 14px 20px;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .orbit-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--deep), var(--mid));
+    border: 1.5px solid var(--cyan);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .orbit-avatar svg { width: 18px; height: 18px; fill: var(--cyan); }
+  .agent-name { font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--white); }
+  .agent-status { font-size: 11px; color: var(--cyan); display: flex; align-items: center; gap: 5px; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .chat-messages {
+    padding: 16px 16px 8px;
+    min-height: 300px; max-height: 320px;
+    overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
+  }
+  .chat-messages::-webkit-scrollbar { width: 3px; }
+  .chat-messages::-webkit-scrollbar-track { background: transparent; }
+  .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  .bubble {
+    max-width: 80%; padding: 10px 14px;
+    font-size: 14px; line-height: 1.5; border-radius: 16px;
+  }
+  .bubble.bot {
+    background: rgba(16,53,96,0.7); color: var(--white);
+    border: 0.5px solid var(--border);
+    align-self: flex-start; border-bottom-left-radius: 4px;
+  }
+  .bubble.user {
+    background: var(--cyan); color: var(--space);
+    align-self: flex-end; border-bottom-right-radius: 4px; font-weight: 500;
+  }
+  .bubble.typing { color: var(--muted); font-style: italic; font-size: 13px; }
+  .opts-row {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    padding: 4px 16px 8px;
+  }
+  .opt {
+    padding: 6px 14px; border-radius: 20px; font-size: 13px;
+    border: 1px solid var(--cyan); color: var(--cyan);
+    background: transparent; cursor: pointer; font-family: var(--font-body);
+    transition: all 0.15s;
+  }
+  .opt:hover { background: var(--cyan); color: var(--space); }
+  .chat-footer {
+    display: flex; gap: 8px; padding: 12px 16px;
+    border-top: 0.5px solid var(--border);
+    background: rgba(6,13,24,0.4);
+  }
+  .chat-footer input {
+    flex: 1; background: rgba(16,53,96,0.4); border: 0.5px solid var(--border);
+    border-radius: 10px; padding: 9px 14px; color: var(--white);
+    font-family: var(--font-body); font-size: 14px; outline: none;
+  }
+  .chat-footer input::placeholder { color: var(--muted); }
+  .chat-footer input:focus { border-color: var(--cyan); }
+  .send-btn {
+    padding: 9px 16px; background: var(--cyan); color: var(--space);
+    border: none; border-radius: 10px; cursor: pointer; font-weight: 600;
+    font-family: var(--font-body); font-size: 13px; transition: all 0.15s;
+  }
+  .send-btn:hover { background: #6EE7D0; }
+
+  /* ── FEATURES ── */
+  .features {
+    position: relative; z-index: 1;
+    padding: 6rem 3rem;
+  }
+  .section-label {
+    text-align: center; font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--cyan); margin-bottom: 1rem;
+  }
+  h2 {
+    font-family: var(--font-display); font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 800; text-align: center; letter-spacing: -0.8px;
+    color: var(--white); margin-bottom: 0.75rem;
+  }
+  .section-sub {
+    text-align: center; color: var(--muted); font-size: 16px; font-weight: 300;
+    max-width: 500px; margin: 0 auto 4rem;
+  }
+  .features-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px;
+    border: 1.5px solid var(--border); border-radius: 16px; overflow: hidden;
+    max-width: 960px; margin: 0 auto;
+  }
+  .feature-card {
+    padding: 2rem 1.75rem;
+    background: rgba(10,37,64,0.4);
+    border: 0.5px solid var(--border);
+    transition: background 0.3s;
+  }
+  .feature-card:hover { background: rgba(10,37,64,0.8); }
+  .feature-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: var(--cyan-glow); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1.25rem;
+  }
+  .feature-icon svg { width: 20px; height: 20px; fill: var(--cyan); }
+  .feature-title {
+    font-family: var(--font-display); font-size: 15px; font-weight: 700;
+    color: var(--white); margin-bottom: 0.5rem;
+  }
+  .feature-desc { font-size: 14px; color: var(--muted); font-weight: 300; line-height: 1.6; }
+
+  /* ── HOW IT WORKS ── */
+  .how {
+    position: relative; z-index: 1;
+    padding: 6rem 3rem;
+    background: rgba(10,37,64,0.2);
+    border-top: 0.5px solid var(--border);
+    border-bottom: 0.5px solid var(--border);
+  }
+  .steps { display: flex; gap: 0; max-width: 860px; margin: 0 auto; position: relative; }
+  .steps::before {
+    content: ''; position: absolute; top: 28px; left: 28px; right: 28px; height: 1px;
+    background: linear-gradient(90deg, var(--cyan), transparent 80%);
+    opacity: 0.3;
+  }
+  .step { flex: 1; text-align: center; padding: 0 1.5rem; position: relative; }
+  .step-num {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--deep); border: 1px solid var(--cyan);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.25rem;
+    font-family: var(--font-display); font-size: 18px; font-weight: 800; color: var(--cyan);
+  }
+  .step-title {
+    font-family: var(--font-display); font-size: 14px; font-weight: 700;
+    color: var(--white); margin-bottom: 0.5rem;
+  }
+  .step-desc { font-size: 13px; color: var(--muted); font-weight: 300; }
+
+  /* ── PRICING ── */
+  .pricing {
+    position: relative; z-index: 1;
+    padding: 6rem 3rem;
+  }
+  .pricing-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; max-width: 900px; margin: 0 auto;
+  }
+  .price-card {
+    background: rgba(10,37,64,0.4); border: 0.5px solid var(--border);
+    border-radius: 16px; padding: 2rem 1.75rem;
+    display: flex; flex-direction: column; gap: 1rem;
+    transition: all 0.3s; position: relative;
+  }
+  .price-card:hover { background: rgba(10,37,64,0.7); border-color: rgba(77,217,192,0.3); }
+  .price-card.featured {
+    border: 1.5px solid var(--cyan);
+    background: rgba(16,53,96,0.5);
+  }
+  .featured-badge {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: var(--cyan); color: var(--space);
+    font-size: 11px; font-weight: 600; padding: 3px 14px; border-radius: 20px;
+    font-family: var(--font-display); letter-spacing: 0.5px;
+  }
+  .plan-name {
+    font-family: var(--font-display); font-size: 13px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase; color: var(--cyan);
+  }
+  .plan-price {
+    font-family: var(--font-display); font-size: 2.2rem; font-weight: 800;
+    color: var(--white); line-height: 1;
+  }
+  .plan-price span { font-size: 14px; font-weight: 300; color: var(--muted); }
+  .plan-setup { font-size: 13px; color: var(--muted); }
+  .plan-features { list-style: none; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .plan-features li {
+    font-size: 14px; color: var(--muted); font-weight: 300;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .plan-features li::before {
+    content: ''; width: 14px; height: 14px; border-radius: 50%;
+    background: var(--cyan-glow); border: 1px solid var(--cyan);
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  }
+  .plan-btn {
+    padding: 11px 20px; border-radius: 40px; font-family: var(--font-body);
+    font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s;
+    text-align: center;
+  }
+  .plan-btn.outline {
+    border: 1px solid var(--border); color: var(--muted); background: transparent;
+  }
+  .plan-btn.outline:hover { border-color: var(--white); color: var(--white); }
+  .plan-btn.solid {
+    background: var(--cyan); color: var(--space); border: none;
+  }
+  .plan-btn.solid:hover { background: #6EE7D0; }
+
+  /* ── CTA BAND ── */
+  .cta-band {
+    position: relative; z-index: 1;
+    margin: 0 3rem 6rem;
+    background: rgba(16,53,96,0.5);
+    border: 0.5px solid var(--border);
+    border-radius: 20px; padding: 3rem;
+    text-align: center;
+  }
+  .cta-band h2 { margin-bottom: 1rem; }
+  .cta-band p { color: var(--muted); font-size: 16px; font-weight: 300; margin-bottom: 2rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative; z-index: 1;
+    border-top: 0.5px solid var(--border);
+    padding: 2rem 3rem;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-logo { font-family: var(--font-display); font-size: 16px; font-weight: 800; color: var(--muted); }
+  .footer-logo span { color: var(--cyan); }
+  footer p { font-size: 13px; color: rgba(240,246,255,0.3); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; gap: 3rem; }
+    .hero-text { max-width: 100%; }
+    .features { padding: 4rem 1.5rem; }
+    .features-grid { grid-template-columns: 1fr; }
+    .how { padding: 4rem 1.5rem; }
+    .steps { flex-direction: column; gap: 2rem; }
+    .steps::before { display: none; }
+    .pricing { padding: 4rem 1.5rem; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .cta-band { margin: 0 1.5rem 4rem; padding: 2rem 1.5rem; }
+    footer { padding: 1.5rem; }
+  }
+
+  /* ── ENTRANCE ANIMATIONS ── */
+  .fade-up {
+    opacity: 0; transform: translateY(24px);
+    animation: fadeUp 0.7s ease forwards;
+  }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.35s; }
+  .delay-4 { animation-delay: 0.5s; }
+</style>
+</head>
+<body>
+
+<!-- Starfield -->
+<div id="stars"></div>
+
+<!-- Nav -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-orbit">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="16" cy="16" r="5" fill="#4DD9C0"/>
+        <ellipse cx="16" cy="16" rx="14" ry="6" stroke="#4DD9C0" stroke-width="1.2" fill="none" transform="rotate(-30 16 16)"/>
+        <circle cx="16" cy="4" r="2.5" fill="#4DD9C0" opacity="0.6"/>
+      </svg>
+    </div>
+    Orbit<span>Homes</span> AI
+  </a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#how">How it works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#demo" class="nav-cta">Try demo</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-eyebrow fade-up">AI-powered real estate</div>
+    <h1 class="fade-up delay-1">Your agency's <em>24/7</em> lead machine</h1>
+    <p class="hero-sub fade-up delay-2">Orbit qualifies buyers, books viewings, and captures every lead — while your agents sleep. Set up in days, not months.</p>
+    <div class="hero-actions fade-up delay-3">
+      <a href="#demo" class="btn-primary">Try Orbit now</a>
+      <a href="#pricing" class="btn-ghost">See pricing</a>
+    </div>
+    <div class="hero-stats fade-up delay-4">
+      <div>
+        <div class="stat-num">24/7</div>
+        <div class="stat-label">Always online</div>
+      </div>
+      <div>
+        <div class="stat-num">3 min</div>
+        <div class="stat-label">Average setup</div>
+      </div>
+      <div>
+        <div class="stat-num">80%</div>
+        <div class="stat-label">Leads auto-qualified</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live chat widget -->
+  <div class="chat-container" id="demo">
+    <div class="chat-glow"></div>
+    <div class="chat-widget">
+      <div class="chat-topbar">
+        <div class="orbit-avatar">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><ellipse cx="12" cy="12" rx="10" ry="4.5" stroke-width="1.2" fill="none" stroke="#4DD9C0" transform="rotate(-30 12 12)"/></svg>
+        </div>
+        <div>
+          <div class="agent-name" id="bot-name-display">Orbit</div>
+          <div class="agent-status"><span class="dot"></span> Online — AI property assistant</div>
+        </div>
+      </div>
+      <div class="chat-messages" id="chat-messages"></div>
+      <div class="opts-row" id="opts-row"></div>
+      <div class="chat-footer">
+        <input type="text" id="chat-input" placeholder="Type your answer..." />
+        <button class="send-btn" id="send-btn">Send</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="features" id="features">
+  <div class="section-label">What Orbit does</div>
+  <h2>Everything your agency needs</h2>
+  <p class="section-sub">One AI assistant that handles the full buyer journey from first message to booked viewing.</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+      </div>
+      <div class="feature-title">Instant lead capture</div>
+      <div class="feature-desc">Orbit greets every website visitor and collects name, email, budget, and timeline before they bounce.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      </div>
+      <div class="feature-title">Smart qualification</div>
+      <div class="feature-desc">Filters serious buyers from browsers automatically. Your agents only receive warm, ready-to-act leads.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+      </div>
+      <div class="feature-title">Viewing bookings</div>
+      <div class="feature-desc">Books property viewings directly into your calendar. No back-and-forth, no missed appointments.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      </div>
+      <div class="feature-title">Agent notifications</div>
+      <div class="feature-desc">Instantly emails your team when a hot lead is captured, with full qualification details attached.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+      </div>
+      <div class="feature-title">WhatsApp ready</div>
+      <div class="feature-desc">Orbit works where your clients are — website chat and WhatsApp from a single dashboard.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+      </div>
+      <div class="feature-title">Lead dashboard</div>
+      <div class="feature-desc">Every lead stored and tagged. See who's hot, who's browsing, and who booked a viewing at a glance.</div>
+    </div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="how" id="how">
+  <div class="section-label">The process</div>
+  <h2>Up and running in 3 steps</h2>
+  <p class="section-sub">No technical team required. We handle everything.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-title">We onboard your agency</div>
+      <div class="step-desc">You tell us about your listings, team, and how you qualify buyers. We train Orbit on your business.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-title">Orbit goes live</div>
+      <div class="step-desc">We add one line of code to your website. Orbit starts greeting visitors and qualifying leads immediately.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-title">You close more deals</div>
+      <div class="step-desc">Your agents receive only warm, qualified leads with full details. More closings, less cold chasing.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section class="pricing" id="pricing">
+  <div class="section-label">Plans</div>
+  <h2>Simple, transparent pricing</h2>
+  <p class="section-sub">One-time setup + monthly retainer. Cancel any time.</p>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="plan-name">Starter</div>
+      <div class="plan-price">$99 <span>/ month</span></div>
+      <div class="plan-setup">+ $300 one-time setup</div>
+      <ul class="plan-features">
+        <li>Website chat widget</li>
+        <li>Lead capture & qualification</li>
+        <li>Property FAQ answers</li>
+        <li>Email agent notifications</li>
+        <li>Lead dashboard</li>
+      </ul>
+      <button class="plan-btn outline">Get started</button>
+    </div>
+    <div class="price-card featured">
+      <div class="featured-badge">Most popular</div>
+      <div class="plan-name">Growth</div>
+      <div class="plan-price">$199 <span>/ month</span></div>
+      <div class="plan-setup">+ $600 one-time setup</div>
+      <ul class="plan-features">
+        <li>Everything in Starter</li>
+        <li>WhatsApp integration</li>
+        <li>Appointment booking</li>
+        <li>CRM sync</li>
+        <li>Priority support</li>
+      </ul>
+      <button class="plan-btn solid">Get started</button>
+    </div>
+    <div class="price-card">
+      <div class="plan-name">Agency Pro</div>
+      <div class="plan-price">$350 <span>/ month</span></div>
+      <div class="plan-setup">+ $1,200 one-time setup</div>
+      <ul class="plan-features">
+        <li>Everything in Growth</li>
+        <li>Multi-agent routing</li>
+        <li>Custom AI training</li>
+        <li>Analytics & reporting</li>
+        <li>Dedicated account manager</li>
+      </ul>
+      <button class="plan-btn outline">Get started</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-band">
+  <h2>Ready to stop losing leads at 2am?</h2>
+  <p>Join agencies already using Orbit to qualify leads around the clock.</p>
+  <a href="#demo" class="btn-primary">Try the demo above</a>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-logo">Orbit<span>Homes</span> AI</div>
+  <p>Built by Lumin Group &nbsp;·&nbsp; Monrovia, Liberia &nbsp;·&nbsp; Global clients</p>
+  <p style="font-size:12px; color:rgba(240,246,255,0.2);">© 2026 OrbitHomes AI</p>
+</footer>
+
+<script>
+/* ── STARFIELD ── */
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 120; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const sz = Math.random() < 0.7 ? 1 : Math.random() < 0.9 ? 1.5 : 2;
+  s.style.cssText = `
+    width:${sz}px; height:${sz}px;
+    left:${Math.random()*100}%;
+    top:${Math.random()*100}%;
+    --d:${2+Math.random()*4}s;
+    --delay:${Math.random()*4}s;
+    --lo:${0.05+Math.random()*0.15};
+    --hi:${0.4+Math.random()*0.6};
+  `;
+  starsEl.appendChild(s);
+}
+
+/* ── CHAT BOT — Claude API powered ── */
+const msgs = document.getElementById('chat-messages');
+const optsRow = document.getElementById('opts-row');
+const chatInput = document.getElementById('chat-input');
+const sendBtn = document.getElementById('send-btn');
+
+/* ════════════════════════════════════════════════
+   AGENCY CONFIG — edit these for each client
+   ════════════════════════════════════════════════ */
+const CONFIG = {
+  API_KEY:        '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',
+  FORMSPREE_ID:   'meevawqn',
+
+  AGENCY_NAME:    'OrbitHomes AI',
+  AGENT_NAME:     'Sarah',
+  BOT_NAME:       'Orbit',
+  SERVICE_AREA:   'all major cities globally',
+  PROPERTY_TYPES: 'residential homes, apartments, land, and commercial property',
+  WHATSAPP:       '',          // e.g. '+1234567890' — leave empty if not used
+  CALENDAR_LINK:  '',          // e.g. 'https://calendly.com/yourlink'
+  LISTINGS_LINK:  '',          // e.g. link to property listings page
+  ESCALATE_PHONE: '',          // agent phone for hot lead escalation
+};
+/* ════════════════════════════════════════════════ */
+
+let history = [];
+let busy = false;
+let leadCaptured = false;
+let leadData = {};
+
+const SYSTEM = `You are ${CONFIG.BOT_NAME}, the AI property assistant for ${CONFIG.AGENCY_NAME}. You are sharp, warm, and genuinely helpful — like a knowledgeable friend who works in real estate.
+
+AGENCY DETAILS:
+- Agency: ${CONFIG.AGENCY_NAME}
+- Lead agent: ${CONFIG.AGENT_NAME}
+- Service area: ${CONFIG.SERVICE_AREA}
+- Property types handled: ${CONFIG.PROPERTY_TYPES}
+${CONFIG.WHATSAPP ? '- WhatsApp: ' + CONFIG.WHATSAPP : ''}
+${CONFIG.CALENDAR_LINK ? '- Booking link: ' + CONFIG.CALENDAR_LINK : ''}
+${CONFIG.LISTINGS_LINK ? '- Listings: ' + CONFIG.LISTINGS_LINK : ''}
+
+YOUR PERSONALITY:
+- Conversational and human. Never robotic or formal.
+- Confident but never pushy.
+- Short responses — 1 to 3 sentences max. This is a chat widget.
+- Never use bullet points. Natural sentences only.
+- Use the visitor name once you know it.
+
+YOUR GOAL:
+Guide every visitor toward booking a call or viewing with ${CONFIG.AGENT_NAME}. Gather naturally across the conversation: intent (buy/sell/rent/invest), budget, preferred location within ${CONFIG.SERVICE_AREA}, timeline, their name, and email or phone. One question at a time only — never fire multiple questions at once.
+
+BUYING — discuss deposit readiness, mortgage status, property type preferences within [${CONFIG.PROPERTY_TYPES}], number of bedrooms, and neighbourhood priorities in ${CONFIG.SERVICE_AREA}.
+SELLING — ask about current property details, timeline to sell, and whether they need a valuation.
+RENTING — monthly budget, move-in date, furnished preference, lease length, pet-friendly needs.
+INVESTING — rental yield vs capital appreciation, residential vs commercial, budget range.
+
+${CONFIG.LISTINGS_LINK ? 'For specific listings, direct them to: ' + CONFIG.LISTINGS_LINK : 'For specific listings or prices, tell them ' + CONFIG.AGENT_NAME + ' will follow up with tailored options.'}
+${CONFIG.CALENDAR_LINK ? 'To book a viewing or consultation, share this link: ' + CONFIG.CALENDAR_LINK : 'To book a viewing, ask for their availability and tell them ' + CONFIG.AGENT_NAME + ' will confirm a time.'}
+
+LEAD HANDOFF:
+Once you have their name and a contact detail, confirm warmly that ${CONFIG.AGENT_NAME} from ${CONFIG.AGENCY_NAME} will reach out within a few hours with options matched to exactly what they described.
+
+HOT LEAD ESCALATION:
+If someone says they are ready to buy/rent NOW, have cash ready, or want to make an offer — flag this urgency clearly in your response and tell them ${CONFIG.AGENT_NAME} will prioritise their enquiry.
+
+OFF-TOPIC:
+Acknowledge briefly and redirect warmly back to finding their property.
+
+NEVER:
+Give specific property addresses or prices you cannot verify. Make promises about availability. Use more than 3 sentences in one reply. Ask more than one question at a time.`;
+
+function addBubble(text, who) {
+  const b = document.createElement('div');
+  b.className = 'bubble ' + who;
+  b.textContent = text;
+  msgs.appendChild(b);
+  msgs.scrollTop = msgs.scrollHeight;
+  return b;
+}
+
+function showTyping() {
+  const b = document.createElement('div');
+  b.className = 'bubble bot typing';
+  b.id = 'typing-indicator';
+  b.textContent = CONFIG.BOT_NAME + ' is typing…';
+  msgs.appendChild(b);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeTyping() {
+  const t = document.getElementById('typing-indicator');
+  if (t) t.remove();
+}
+
+function setUI(enabled) {
+  chatInput.disabled = !enabled;
+  sendBtn.disabled = !enabled;
+  sendBtn.style.opacity = enabled ? '1' : '0.5';
+}
+
+const GREETING = `Hello! I'm ${CONFIG.BOT_NAME}, your 24/7 property assistant for ${CONFIG.AGENCY_NAME}. Are you looking to buy, sell, rent, or invest in ${CONFIG.SERVICE_AREA}?`;
+
+async function orbitReply(userText) {
+  if (busy) return;
+  busy = true;
+  setUI(false);
+  clearOpts();
+
+  addBubble(userText, 'user');
+  history.push({ role: 'user', content: userText });
+  showTyping();
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': CONFIG.API_KEY, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({ model: "claude-haiku-4-5-20251001", max_tokens: 300, system: SYSTEM, messages: history })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || "Sorry, I didn't catch that. Could you try again?";
+    removeTyping();
+    addBubble(reply, 'bot');
+    history.push({ role: 'assistant', content: reply });
+
+    if (!leadCaptured) {
+      const transcript = history.map(m => m.content).join(' ').toLowerCase();
+      const emailMatch = userText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+      const phoneMatch = userText.match(/[\d\s\+\-]{7,}/);
+      if (emailMatch || phoneMatch) {
+        leadData.contact = emailMatch ? emailMatch[0] : phoneMatch[0];
+        leadData.message = history.filter(m=>m.role==='user').map(m=>m.content).join(' | ');
+        leadCaptured = true;
+        notifyAgent(leadData);
+      }
+    }
+
+  } catch (e) {
+    removeTyping();
+    addBubble("Something went wrong on my end. Please try again in a moment.", 'bot');
+  }
+
+  busy = false;
+  setUI(true);
+  chatInput.focus();
+}
+
+async function notifyAgent(lead) {
+  try {
+    await fetch('https://formspree.io/f/' + CONFIG.FORMSPREE_ID, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        subject: 'New lead for ' + CONFIG.AGENCY_NAME,
+        contact: lead.contact,
+        conversation: lead.message
+      })
+    });
+  } catch(e) { console.log('notify failed', e); }
+}
+
+function clearOpts() { optsRow.innerHTML = ''; }
+
+function sendText() {
+  const val = chatInput.value.trim();
+  if (!val || busy) return;
+  chatInput.value = '';
+  orbitReply(val);
+}
+
+sendBtn.onclick = sendText;
+chatInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendText(); });
+
+/* Update header display name */
+document.getElementById("bot-name-display").textContent = CONFIG.BOT_NAME;
+
+/* Show greeting immediately — no API call needed */
+setTimeout(() => {
+  addBubble(GREETING, 'bot');
+  history.push({ role: 'assistant', content: GREETING });
+}, 600);
+</script>
+</body>
+</html>
