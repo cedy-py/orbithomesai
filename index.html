@@ -660,8 +660,8 @@ const sendBtn = document.getElementById('send-btn');
    AGENCY CONFIG — edit these for each client
    ════════════════════════════════════════════════ */
 const CONFIG = {
-  API_KEY:        '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',
-  FORMSPREE_ID:   'meevawqn',
+  API_KEY:        localStorage.getItem('orbit_api_key') || '',
+  FORMSPREE_ID:   'PASTE_FORMSPREE_ID',
 
   AGENCY_NAME:    'OrbitHomes AI',
   AGENT_NAME:     'Sarah',
@@ -821,6 +821,13 @@ function sendText() {
 
 sendBtn.onclick = sendText;
 chatInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendText(); });
+
+/* First-time API key setup */
+if (!localStorage.getItem('orbit_api_key')) {
+  const k = prompt('Enter your Anthropic API key to activate Orbit:');
+  if (k && k.trim()) localStorage.setItem('orbit_api_key', k.trim());
+  CONFIG.API_KEY = localStorage.getItem('orbit_api_key') || '';
+}
 
 /* Update header display name */
 document.getElementById("bot-name-display").textContent = CONFIG.BOT_NAME;
