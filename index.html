@@ -417,12 +417,73 @@
   .delay-2 { animation-delay: 0.2s; }
   .delay-3 { animation-delay: 0.35s; }
   .delay-4 { animation-delay: 0.5s; }
+
+  .setup-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(6,13,24,0.97);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .setup-box {
+    background: rgba(10,37,64,0.9);
+    border: 1px solid var(--cyan);
+    border-radius: 16px;
+    padding: 2.5rem;
+    max-width: 420px; width: 90%;
+    text-align: center;
+  }
+  .setup-box h2 {
+    font-family: var(--font-display);
+    font-size: 1.4rem; font-weight: 800;
+    color: var(--white); margin-bottom: 0.75rem;
+  }
+  .setup-box p {
+    font-size: 14px; color: var(--muted);
+    margin-bottom: 1.5rem; line-height: 1.6;
+  }
+  .setup-input {
+    width: 100%; padding: 10px 14px;
+    background: rgba(6,13,24,0.8);
+    border: 1px solid var(--border);
+    border-radius: 8px; color: var(--white);
+    font-size: 13px; font-family: var(--font-body);
+    margin-bottom: 1rem; outline: none;
+    letter-spacing: 0.5px;
+  }
+  .setup-input:focus { border-color: var(--cyan); }
+  .setup-btn {
+    width: 100%; padding: 12px;
+    background: var(--cyan); color: var(--space);
+    border: none; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+    cursor: pointer; font-family: var(--font-body);
+  }
+  .setup-btn:hover { background: #6EE7D0; }
+  .setup-error {
+    font-size: 12px; color: #ff6b6b;
+    margin-top: 8px; display: none;
+  }
 </style>
 </head>
 <body>
 
 <!-- Starfield -->
 <div id="stars"></div>
+<div class="setup-overlay" id="setup-overlay" style="display:flex">
+  <div class="setup-box">
+    <div style="font-size:32px;margin-bottom:1rem">
+      <svg width="40" height="40" viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="5" fill="#4DD9C0"/>
+        <ellipse cx="16" cy="16" rx="14" ry="6" stroke="#4DD9C0" stroke-width="1.2" fill="none" transform="rotate(-30 16 16)"/>
+      </svg>
+    </div>
+    <h2>Activate Orbit</h2>
+    <p>Enter your Anthropic API key to power Orbit. This is stored only in your browser — never shared.</p>
+    <input type="password" class="setup-input" id="key-input" placeholder="sk-ant-api03-..." />
+    <button class="setup-btn" onclick="activateOrbit()">Activate Orbit</button>
+    <div class="setup-error" id="setup-error">Invalid key format. Key should start with sk-ant-</div>
+  </div>
+</div>
+
 
 <!-- Nav -->
 <nav>
@@ -660,8 +721,7 @@ const sendBtn = document.getElementById('send-btn');
    AGENCY CONFIG — edit these for each client
    ════════════════════════════════════════════════ */
 const CONFIG = {
-  API_KEY:        "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"
-,
+  API_KEY:        "",
   FORMSPREE_ID:   'PASTE_FORMSPREE_ID',
 
   AGENCY_NAME:    'OrbitHomes AI',
@@ -823,21 +883,35 @@ function sendText() {
 sendBtn.onclick = sendText;
 chatInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendText(); });
 
-/* First-time API key setup */
-if (!localStorage.getItem('orbit_api_key')) {
-  const k = prompt('Enter your Anthropic API key to activate Orbit:');
-  if (k && k.trim()) localStorage.setItem('orbit_api_key', k.trim());
-  CONFIG.API_KEY = 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;
-}
-
-/* Update header display name */
 document.getElementById("bot-name-display").textContent = CONFIG.BOT_NAME;
 
-/* Show greeting immediately — no API call needed */
-setTimeout(() => {
-  addBubble(GREETING, 'bot');
-  history.push({ role: 'assistant', content: GREETING });
-}, 600);
+function activateOrbit() {
+  const key = document.getElementById('key-input').value.trim();
+  if (!key || !key.startsWith('sk-ant-')) {
+    document.getElementById('setup-error').style.display = 'block';
+    return;
+  }
+  localStorage.setItem('orbit_api_key', key);
+  CONFIG.API_KEY = key;
+  document.getElementById('setup-overlay').style.display = 'none';
+  startOrbit();
+}
+
+function startOrbit() {
+  setTimeout(() => {
+    addBubble(GREETING, 'bot');
+    history.push({ role: 'assistant', content: GREETING });
+  }, 400);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('orbit_api_key');
+  if (saved) {
+    CONFIG.API_KEY = saved;
+    document.getElementById('setup-overlay').style.display = 'none';
+    startOrbit();
+  }
+});
 </script>
 </body>
 </html>
