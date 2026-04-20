@@ -660,7 +660,7 @@ const sendBtn = document.getElementById('send-btn');
    AGENCY CONFIG — edit these for each client
    ════════════════════════════════════════════════ */
 const CONFIG = {
-  API_KEY:        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
+  API_KEY:        "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"
 ,
   FORMSPREE_ID:   'PASTE_FORMSPREE_ID',
 
@@ -827,7 +827,7 @@ chatInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendText(); 
 if (!localStorage.getItem('orbit_api_key')) {
   const k = prompt('Enter your Anthropic API key to activate Orbit:');
   if (k && k.trim()) localStorage.setItem('orbit_api_key', k.trim());
-  CONFIG.API_KEY = localStorage.getItem('orbit_api_key') || '';
+  CONFIG.API_KEY = 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;
 }
 
 /* Update header display name */
