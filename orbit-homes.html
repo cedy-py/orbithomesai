@@ -1,0 +1,2078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orbit Homes — Property Management</title>
+<style>
+/* ===================== RESET & BASE ===================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --brand: #6C3FC5;
+  --brand-light: #8B5CF6;
+  --brand-dark: #4C2A8A;
+  --brand-glow: rgba(108,63,197,0.25);
+  --bg: #0f0f1a;
+  --bg2: #14141f;
+  --bg3: #1a1a2e;
+  --bg4: #20203a;
+  --card: #16162a;
+  --card2: #1c1c32;
+  --border: rgba(108,63,197,0.2);
+  --border2: rgba(255,255,255,0.06);
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --green: #10b981;
+  --green-bg: rgba(16,185,129,0.1);
+  --yellow: #f59e0b;
+  --yellow-bg: rgba(245,158,11,0.1);
+  --red: #ef4444;
+  --red-bg: rgba(239,68,68,0.1);
+  --blue: #3b82f6;
+  --blue-bg: rgba(59,130,246,0.1);
+  --radius: 10px;
+  --radius-lg: 14px;
+  --sidebar-w: 230px;
+  --header-h: 60px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+html, body { height: 100%; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; }
+
+/* ===================== LAYOUT ===================== */
+.app { display: flex; height: 100vh; overflow: hidden; }
+
+/* ===================== SIDEBAR ===================== */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
+.sidebar-logo {
+  padding: 20px 18px 16px;
+  border-bottom: 1px solid var(--border2);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-light));
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.logo-text { line-height: 1.2; }
+.logo-text .name { font-size: 15px; font-weight: 700; color: var(--text); }
+.logo-text .tagline { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; }
+
+.sidebar-nav { padding: 12px 10px; flex: 1; }
+
+.nav-section { margin-bottom: 6px; }
+.nav-label { font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; padding: 4px 8px 6px; }
+
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text2);
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  position: relative;
+  user-select: none;
+  margin-bottom: 1px;
+}
+.nav-item:hover { background: var(--bg4); color: var(--text); }
+.nav-item.active { background: var(--brand-glow); color: var(--brand-light); }
+.nav-item.active::before {
+  content: '';
+  position: absolute; left: 0; top: 20%; height: 60%; width: 3px;
+  background: var(--brand-light); border-radius: 0 2px 2px 0;
+}
+
+.nav-icon { font-size: 16px; width: 20px; text-align: center; }
+
+.nav-badge {
+  margin-left: auto; background: var(--red); color: #fff;
+  font-size: 10px; font-weight: 700;
+  padding: 1px 6px; border-radius: 10px;
+  min-width: 18px; text-align: center;
+}
+
+.sidebar-footer {
+  padding: 14px 18px;
+  border-top: 1px solid var(--border2);
+  font-size: 11px; color: var(--text3);
+}
+
+/* ===================== MAIN ===================== */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+.topbar {
+  height: var(--header-h);
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px;
+  flex-shrink: 0;
+}
+
+.topbar-left { display: flex; align-items: center; gap: 12px; }
+.page-title { font-size: 18px; font-weight: 700; color: var(--text); }
+.page-subtitle { font-size: 12px; color: var(--text3); }
+
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 14px; border-radius: 8px; border: none;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: all 0.15s ease; white-space: nowrap;
+}
+.btn-primary { background: var(--brand); color: #fff; }
+.btn-primary:hover { background: var(--brand-light); }
+.btn-secondary { background: var(--bg4); color: var(--text2); border: 1px solid var(--border2); }
+.btn-secondary:hover { background: var(--bg3); color: var(--text); }
+.btn-danger { background: var(--red-bg); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+.btn-danger:hover { background: var(--red); color: #fff; }
+.btn-sm { padding: 5px 10px; font-size: 12px; border-radius: 6px; }
+.btn-icon { padding: 7px 9px; }
+
+.content { flex: 1; overflow-y: auto; padding: 24px; }
+
+/* ===================== VIEWS ===================== */
+.view { display: none; }
+.view.active { display: block; }
+
+/* ===================== DASHBOARD ===================== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--brand), var(--brand-light));
+}
+.stat-card .label { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; }
+.stat-card .value { font-size: 28px; font-weight: 800; color: var(--text); line-height: 1; }
+.stat-card .sub { font-size: 12px; color: var(--text3); margin-top: 6px; }
+.stat-card .icon { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); font-size: 36px; opacity: 0.12; }
+
+.stat-card.green .value { color: var(--green); }
+.stat-card.green::before { background: linear-gradient(90deg, var(--green), #34d399); }
+.stat-card.yellow .value { color: var(--yellow); }
+.stat-card.yellow::before { background: linear-gradient(90deg, var(--yellow), #fcd34d); }
+.stat-card.red .value { color: var(--red); }
+.stat-card.red::before { background: linear-gradient(90deg, var(--red), #f87171); }
+
+.dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+.dash-panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.dash-panel-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.dash-panel-header h3 { font-size: 14px; font-weight: 600; color: var(--text); }
+.dash-panel-body { padding: 8px 0; }
+
+.dash-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 20px;
+  transition: background 0.1s;
+}
+.dash-row:hover { background: var(--bg4); }
+.dash-row .name { font-size: 13px; color: var(--text); font-weight: 500; }
+.dash-row .meta { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.dash-row-left { flex: 1; }
+.dash-row-right { text-align: right; }
+
+.empty-state {
+  text-align: center; padding: 40px 20px; color: var(--text3);
+}
+.empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+.empty-state p { font-size: 13px; }
+
+/* ===================== TABLES ===================== */
+.table-container {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.table-toolbar {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border2);
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+
+.search-box {
+  flex: 1; min-width: 200px;
+  background: var(--bg4);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 7px 12px 7px 34px;
+  color: var(--text);
+  font-size: 13px;
+  outline: none;
+  position: relative;
+}
+.search-wrap { position: relative; flex: 1; min-width: 200px; }
+.search-wrap::before {
+  content: '🔍';
+  position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+  font-size: 13px; pointer-events: none;
+}
+.search-wrap .search-box { width: 100%; padding-left: 32px; }
+.search-box:focus { border-color: var(--brand); }
+.search-box::placeholder { color: var(--text3); }
+
+select.filter-select {
+  background: var(--bg4);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 7px 10px;
+  color: var(--text2);
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+}
+select.filter-select:focus { border-color: var(--brand); }
+
+table {
+  width: 100%; border-collapse: collapse;
+}
+thead th {
+  background: var(--bg3);
+  color: var(--text3);
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.6px;
+  padding: 10px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border2);
+  white-space: nowrap;
+}
+tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border2);
+  font-size: 13px; color: var(--text);
+  vertical-align: middle;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: rgba(255,255,255,0.02); }
+
+.actions-cell { display: flex; gap: 6px; align-items: center; }
+
+/* ===================== BADGES ===================== */
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 8px; border-radius: 20px;
+  font-size: 11px; font-weight: 600;
+  white-space: nowrap;
+}
+.badge-green { background: var(--green-bg); color: var(--green); }
+.badge-yellow { background: var(--yellow-bg); color: var(--yellow); }
+.badge-red { background: var(--red-bg); color: var(--red); }
+.badge-blue { background: var(--blue-bg); color: var(--blue); }
+.badge-gray { background: rgba(100,116,139,0.15); color: var(--text3); }
+.badge-brand { background: var(--brand-glow); color: var(--brand-light); }
+
+/* ===================== MODAL ===================== */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(0,0,0,0.65);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+
+.modal {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  width: 100%; max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  transform: scale(0.96) translateY(8px);
+  transition: transform 0.2s ease;
+}
+.modal-overlay.open .modal { transform: scale(1) translateY(0); }
+.modal-lg { max-width: 720px; }
+
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border2);
+}
+.modal-header h2 { font-size: 16px; font-weight: 700; color: var(--text); }
+
+.modal-close {
+  background: none; border: none; color: var(--text3); cursor: pointer;
+  font-size: 18px; padding: 2px 6px; border-radius: 4px;
+  transition: color 0.15s;
+}
+.modal-close:hover { color: var(--text); }
+
+.modal-body { padding: 22px; }
+
+.modal-footer {
+  display: flex; justify-content: flex-end; gap: 10px;
+  padding: 16px 22px;
+  border-top: 1px solid var(--border2);
+}
+
+/* ===================== FORMS ===================== */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-grid.cols-1 { grid-template-columns: 1fr; }
+.form-full { grid-column: 1 / -1; }
+
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label {
+  font-size: 12px; font-weight: 600; color: var(--text2);
+  text-transform: uppercase; letter-spacing: 0.4px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  background: var(--bg4);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 9px 12px;
+  color: var(--text);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s;
+  font-family: inherit;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-glow); }
+.form-group input::placeholder { color: var(--text3); }
+.form-group textarea { resize: vertical; min-height: 80px; }
+.form-group select option { background: var(--bg3); }
+
+.form-hint { font-size: 11px; color: var(--text3); }
+
+/* ===================== ALERTS ===================== */
+.alert-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+.alert-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+.alert-item.danger { border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.05); }
+.alert-item.warning { border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.05); }
+.alert-item.info { border-color: rgba(59,130,246,0.3); background: rgba(59,130,246,0.05); }
+.alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.alert-content .title { font-size: 13px; font-weight: 600; color: var(--text); }
+.alert-content .desc { font-size: 12px; color: var(--text2); margin-top: 3px; }
+
+/* ===================== PROGRESS BAR ===================== */
+.progress-bar { height: 6px; background: var(--bg4); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--brand), var(--brand-light)); transition: width 0.5s ease; }
+
+/* ===================== SECTION HEADER ===================== */
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.section-title { font-size: 16px; font-weight: 700; color: var(--text); }
+.section-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+
+/* ===================== TABS ===================== */
+.tabs { display: flex; gap: 2px; background: var(--bg3); padding: 4px; border-radius: 10px; margin-bottom: 20px; width: fit-content; }
+.tab {
+  padding: 7px 16px; border-radius: 7px; font-size: 13px; font-weight: 500;
+  color: var(--text3); cursor: pointer; transition: all 0.15s; border: none; background: none;
+}
+.tab.active { background: var(--brand); color: #fff; }
+.tab:hover:not(.active) { color: var(--text); background: var(--bg4); }
+
+/* ===================== RENT TRACKING ===================== */
+.month-nav {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 18px;
+}
+.month-nav-btn {
+  background: var(--bg4); border: 1px solid var(--border2); color: var(--text);
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 14px; transition: all 0.15s;
+}
+.month-nav-btn:hover { background: var(--brand); border-color: var(--brand); }
+.month-display { font-size: 16px; font-weight: 700; color: var(--text); min-width: 160px; text-align: center; }
+
+.rent-summary-bar {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 12px; margin-bottom: 20px;
+}
+.rent-mini-stat {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px 16px;
+  text-align: center;
+}
+.rent-mini-stat .val { font-size: 22px; font-weight: 800; }
+.rent-mini-stat .lbl { font-size: 11px; color: var(--text3); margin-top: 3px; }
+.rent-mini-stat.green .val { color: var(--green); }
+.rent-mini-stat.yellow .val { color: var(--yellow); }
+.rent-mini-stat.red .val { color: var(--red); }
+
+/* ===================== MAINTENANCE ===================== */
+.maint-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin-bottom: 10px;
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.maint-icon {
+  width: 38px; height: 38px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.maint-icon.open { background: var(--red-bg); }
+.maint-icon.in-progress { background: var(--yellow-bg); }
+.maint-icon.resolved { background: var(--green-bg); }
+.maint-info { flex: 1; }
+.maint-title { font-size: 14px; font-weight: 600; color: var(--text); }
+.maint-meta { font-size: 12px; color: var(--text3); margin-top: 3px; }
+.maint-desc { font-size: 12px; color: var(--text2); margin-top: 6px; }
+.maint-actions { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
+
+/* ===================== REPORTS ===================== */
+.report-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 22px;
+  margin-bottom: 16px;
+}
+.report-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 14px; color: var(--text); }
+
+/* ===================== PRINT STYLES ===================== */
+@media print {
+  .sidebar, .topbar, .no-print { display: none !important; }
+  .main { overflow: visible !important; }
+  .content { padding: 0 !important; overflow: visible !important; }
+  body, html { background: #fff !important; color: #000 !important; }
+  .print-view { display: block !important; }
+  .table-container, .report-card { border: 1px solid #ddd !important; break-inside: avoid; }
+  table { font-size: 11px; }
+  .badge { border: 1px solid #ccc; }
+}
+.print-view { display: none; }
+
+/* ===================== SCROLLBAR ===================== */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* ===================== NOTIFICATION AREA ===================== */
+.notif-section { margin-bottom: 24px; }
+.notif-section h3 { font-size: 13px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 10px; }
+
+/* ===================== CONFIRM DIALOG ===================== */
+.confirm-overlay {
+  position: fixed; inset: 0; z-index: 2000;
+  background: rgba(0,0,0,0.7);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.15s;
+}
+.confirm-overlay.open { opacity: 1; pointer-events: all; }
+.confirm-box {
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 24px; max-width: 360px; width: 100%;
+  box-shadow: var(--shadow);
+}
+.confirm-box h3 { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+.confirm-box p { font-size: 13px; color: var(--text2); margin-bottom: 20px; }
+.confirm-box .buttons { display: flex; gap: 10px; justify-content: flex-end; }
+
+/* ===================== PAYMENT HISTORY ===================== */
+.payment-history {
+  background: var(--bg3); border-radius: 8px; padding: 12px 14px;
+  margin-top: 12px;
+}
+.payment-history h4 { font-size: 12px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+.payment-entry {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 7px 0; border-bottom: 1px solid var(--border2); font-size: 12px;
+}
+.payment-entry:last-child { border-bottom: none; }
+
+/* ===================== TOOLTIP ===================== */
+[data-tip] { position: relative; cursor: default; }
+[data-tip]:hover::after {
+  content: attr(data-tip);
+  position: absolute; bottom: calc(100% + 5px); left: 50%; transform: translateX(-50%);
+  background: var(--bg4); color: var(--text); font-size: 11px;
+  padding: 4px 8px; border-radius: 5px; white-space: nowrap;
+  border: 1px solid var(--border2); pointer-events: none; z-index: 100;
+}
+
+/* ===================== OCCUPANCY VISUAL ===================== */
+.occupancy-ring {
+  position: relative; display: inline-flex;
+  align-items: center; justify-content: center;
+}
+.occupancy-ring svg { transform: rotate(-90deg); }
+.occupancy-ring .pct {
+  position: absolute; font-size: 22px; font-weight: 800;
+  color: var(--brand-light);
+}
+
+/* ===================== TOAST ===================== */
+.toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
+.toast {
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 16px;
+  font-size: 13px; color: var(--text);
+  box-shadow: var(--shadow); min-width: 240px;
+  display: flex; align-items: center; gap: 10px;
+  animation: slideIn 0.2s ease;
+}
+.toast.success { border-color: rgba(16,185,129,0.4); }
+.toast.error { border-color: rgba(239,68,68,0.4); }
+@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ==================== SIDEBAR ==================== -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">🏠</div>
+      <div class="logo-text">
+        <div class="name">Orbit Homes</div>
+        <div class="tagline">Property Manager</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-label">Main</div>
+        <div class="nav-item active" data-view="dashboard">
+          <span class="nav-icon">📊</span> Dashboard
+        </div>
+        <div class="nav-item" data-view="notifications">
+          <span class="nav-icon">🔔</span> Notifications
+          <span class="nav-badge" id="notif-badge" style="display:none">0</span>
+        </div>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-label">Management</div>
+        <div class="nav-item" data-view="properties">
+          <span class="nav-icon">🏢</span> Properties
+        </div>
+        <div class="nav-item" data-view="tenants">
+          <span class="nav-icon">👥</span> Tenants
+        </div>
+        <div class="nav-item" data-view="rent">
+          <span class="nav-icon">💰</span> Rent Tracking
+        </div>
+        <div class="nav-item" data-view="maintenance">
+          <span class="nav-icon">🔧</span> Maintenance
+        </div>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-label">Reports</div>
+        <div class="nav-item" data-view="reports">
+          <span class="nav-icon">📄</span> Reports
+        </div>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      Orbit Homes v1.0.0<br>All data stored locally
+    </div>
+  </aside>
+
+  <!-- ==================== MAIN ==================== -->
+  <main class="main">
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <div>
+          <div class="page-title" id="page-title">Dashboard</div>
+          <div class="page-subtitle" id="page-subtitle">Property overview</div>
+        </div>
+      </div>
+      <div class="topbar-right" id="topbar-actions"></div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- ========== DASHBOARD VIEW ========== -->
+      <div class="view active" id="view-dashboard">
+        <div class="stats-grid" id="dash-stats"></div>
+        <div class="dashboard-grid">
+          <div class="dash-panel">
+            <div class="dash-panel-header">
+              <h3>Recent Tenants</h3>
+              <button class="btn btn-secondary btn-sm" onclick="navigate('tenants')">View All</button>
+            </div>
+            <div class="dash-panel-body" id="dash-tenants"></div>
+          </div>
+          <div class="dash-panel">
+            <div class="dash-panel-header">
+              <h3>Outstanding Balances</h3>
+              <button class="btn btn-secondary btn-sm" onclick="navigate('rent')">View All</button>
+            </div>
+            <div class="dash-panel-body" id="dash-balances"></div>
+          </div>
+          <div class="dash-panel">
+            <div class="dash-panel-header">
+              <h3>Properties Overview</h3>
+              <button class="btn btn-secondary btn-sm" onclick="navigate('properties')">View All</button>
+            </div>
+            <div class="dash-panel-body" id="dash-properties"></div>
+          </div>
+          <div class="dash-panel">
+            <div class="dash-panel-header">
+              <h3>Open Maintenance</h3>
+              <button class="btn btn-secondary btn-sm" onclick="navigate('maintenance')">View All</button>
+            </div>
+            <div class="dash-panel-body" id="dash-maintenance"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== NOTIFICATIONS VIEW ========== -->
+      <div class="view" id="view-notifications">
+        <div id="notif-content"></div>
+      </div>
+
+      <!-- ========== PROPERTIES VIEW ========== -->
+      <div class="view" id="view-properties">
+        <div class="table-container">
+          <div class="table-toolbar">
+            <div class="search-wrap">
+              <input class="search-box" id="prop-search" placeholder="Search properties..." oninput="renderProperties()">
+            </div>
+            <select class="filter-select" id="prop-type-filter" onchange="renderProperties()">
+              <option value="">All Types</option>
+              <option value="apartment">Apartment</option>
+              <option value="house">House</option>
+              <option value="commercial">Commercial</option>
+            </select>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Property Name</th>
+                <th>Address</th>
+                <th>Type</th>
+                <th>Units</th>
+                <th>Monthly Rent</th>
+                <th>Occupied</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="prop-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ========== TENANTS VIEW ========== -->
+      <div class="view" id="view-tenants">
+        <div class="table-container">
+          <div class="table-toolbar">
+            <div class="search-wrap">
+              <input class="search-box" id="tenant-search" placeholder="Search tenants..." oninput="renderTenants()">
+            </div>
+            <select class="filter-select" id="tenant-prop-filter" onchange="renderTenants()">
+              <option value="">All Properties</option>
+            </select>
+            <select class="filter-select" id="tenant-status-filter" onchange="renderTenants()">
+              <option value="">All Statuses</option>
+              <option value="active">Active</option>
+              <option value="expiring">Expiring Soon</option>
+              <option value="expired">Expired</option>
+            </select>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Contact</th>
+                <th>Property / Unit</th>
+                <th>Lease Period</th>
+                <th>Monthly Rent</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tenant-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ========== RENT TRACKING VIEW ========== -->
+      <div class="view" id="view-rent">
+        <div class="month-nav">
+          <button class="month-nav-btn" onclick="changeMonth(-1)">‹</button>
+          <div class="month-display" id="month-display"></div>
+          <button class="month-nav-btn" onclick="changeMonth(1)">›</button>
+        </div>
+        <div class="rent-summary-bar" id="rent-summary"></div>
+        <div class="table-container">
+          <div class="table-toolbar">
+            <div class="search-wrap">
+              <input class="search-box" id="rent-search" placeholder="Search tenant..." oninput="renderRent()">
+            </div>
+            <select class="filter-select" id="rent-status-filter" onchange="renderRent()">
+              <option value="">All Statuses</option>
+              <option value="paid">Paid</option>
+              <option value="partial">Partial</option>
+              <option value="unpaid">Unpaid</option>
+            </select>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Tenant</th>
+                <th>Property / Unit</th>
+                <th>Rent Due</th>
+                <th>Paid</th>
+                <th>Balance</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="rent-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ========== MAINTENANCE VIEW ========== -->
+      <div class="view" id="view-maintenance">
+        <div class="table-toolbar no-print" style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:16px;gap:10px;padding:14px 18px;">
+          <div class="search-wrap">
+            <input class="search-box" id="maint-search" placeholder="Search maintenance..." oninput="renderMaintenance()">
+          </div>
+          <select class="filter-select" id="maint-status-filter" onchange="renderMaintenance()">
+            <option value="">All Statuses</option>
+            <option value="open">Open</option>
+            <option value="in-progress">In Progress</option>
+            <option value="resolved">Resolved</option>
+          </select>
+          <select class="filter-select" id="maint-prop-filter" onchange="renderMaintenance()">
+            <option value="">All Properties</option>
+          </select>
+        </div>
+        <div id="maint-list"></div>
+      </div>
+
+      <!-- ========== REPORTS VIEW ========== -->
+      <div class="view" id="view-reports">
+        <div class="tabs" style="margin-bottom:20px;">
+          <button class="tab active" onclick="switchReportTab('summary',this)">Monthly Summary</button>
+          <button class="tab" onclick="switchReportTab('occupancy',this)">Occupancy</button>
+          <button class="tab" onclick="switchReportTab('balances',this)">Outstanding Balances</button>
+        </div>
+        <div id="report-content"></div>
+      </div>
+
+    </div><!-- /content -->
+  </main>
+</div><!-- /app -->
+
+<!-- ==================== MODALS ==================== -->
+
+<!-- Property Modal -->
+<div class="modal-overlay" id="modal-property">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="prop-modal-title">Add Property</h2>
+      <button class="modal-close" onclick="closeModal('modal-property')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group form-full">
+          <label>Property Name *</label>
+          <input type="text" id="prop-name" placeholder="e.g. Sunrise Apartments">
+        </div>
+        <div class="form-group form-full">
+          <label>Address *</label>
+          <input type="text" id="prop-address" placeholder="Full address">
+        </div>
+        <div class="form-group">
+          <label>Property Type *</label>
+          <select id="prop-type">
+            <option value="apartment">Apartment</option>
+            <option value="house">House</option>
+            <option value="commercial">Commercial</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Number of Units *</label>
+          <input type="number" id="prop-units" placeholder="e.g. 12" min="1">
+        </div>
+        <div class="form-group">
+          <label>Monthly Rent (KES) *</label>
+          <input type="number" id="prop-rent" placeholder="e.g. 25000" min="0">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <input type="text" id="prop-desc" placeholder="Optional notes">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-property')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveProperty()">Save Property</button>
+    </div>
+  </div>
+</div>
+
+<!-- Tenant Modal -->
+<div class="modal-overlay" id="modal-tenant">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="tenant-modal-title">Add Tenant</h2>
+      <button class="modal-close" onclick="closeModal('modal-tenant')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" id="tenant-name" placeholder="John Doe">
+        </div>
+        <div class="form-group">
+          <label>Phone *</label>
+          <input type="tel" id="tenant-phone" placeholder="+254 712 345 678">
+        </div>
+        <div class="form-group form-full">
+          <label>Email</label>
+          <input type="email" id="tenant-email" placeholder="john@email.com">
+        </div>
+        <div class="form-group">
+          <label>Property *</label>
+          <select id="tenant-prop" onchange="populateUnitOptions()"></select>
+        </div>
+        <div class="form-group">
+          <label>Unit / Room</label>
+          <input type="text" id="tenant-unit" placeholder="e.g. 3A, Room 5">
+        </div>
+        <div class="form-group">
+          <label>Lease Start *</label>
+          <input type="date" id="tenant-start">
+        </div>
+        <div class="form-group">
+          <label>Lease End *</label>
+          <input type="date" id="tenant-end">
+        </div>
+        <div class="form-group">
+          <label>Monthly Rent (KES)</label>
+          <input type="number" id="tenant-rent" placeholder="Auto-filled from property" min="0">
+        </div>
+        <div class="form-group form-full">
+          <label>Notes</label>
+          <textarea id="tenant-notes" placeholder="Additional notes..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-tenant')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveTenant()">Save Tenant</button>
+    </div>
+  </div>
+</div>
+
+<!-- Rent Payment Modal -->
+<div class="modal-overlay" id="modal-rent">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="rent-modal-title">Record Payment</h2>
+      <button class="modal-close" onclick="closeModal('modal-rent')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="rent-modal-info" style="background:var(--bg3);border-radius:8px;padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--text2);"></div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Amount Paid (KES) *</label>
+          <input type="number" id="rent-amount-paid" placeholder="0" min="0">
+        </div>
+        <div class="form-group">
+          <label>Payment Date</label>
+          <input type="date" id="rent-pay-date">
+        </div>
+        <div class="form-group form-full">
+          <label>Payment Method</label>
+          <select id="rent-pay-method">
+            <option value="mpesa">M-Pesa</option>
+            <option value="cash">Cash</option>
+            <option value="bank">Bank Transfer</option>
+            <option value="cheque">Cheque</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group form-full">
+          <label>Reference / Notes</label>
+          <input type="text" id="rent-pay-ref" placeholder="e.g. MPESA ref: QJX123...">
+        </div>
+      </div>
+      <div id="rent-payment-history"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-rent')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveRentPayment()">Record Payment</button>
+    </div>
+  </div>
+</div>
+
+<!-- Maintenance Modal -->
+<div class="modal-overlay" id="modal-maintenance">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="maint-modal-title">Log Maintenance Request</h2>
+      <button class="modal-close" onclick="closeModal('modal-maintenance')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Property *</label>
+          <select id="maint-prop"></select>
+        </div>
+        <div class="form-group">
+          <label>Unit / Area</label>
+          <input type="text" id="maint-unit" placeholder="e.g. Unit 2B, Roof">
+        </div>
+        <div class="form-group form-full">
+          <label>Issue Title *</label>
+          <input type="text" id="maint-title" placeholder="e.g. Leaking pipe in bathroom">
+        </div>
+        <div class="form-group form-full">
+          <label>Description</label>
+          <textarea id="maint-desc" placeholder="Describe the issue in detail..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Priority</label>
+          <select id="maint-priority">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+            <option value="urgent">Urgent</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="maint-status">
+            <option value="open">Open</option>
+            <option value="in-progress">In Progress</option>
+            <option value="resolved">Resolved</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Reported Date</label>
+          <input type="date" id="maint-date">
+        </div>
+        <div class="form-group">
+          <label>Assigned To</label>
+          <input type="text" id="maint-assign" placeholder="Technician / Contractor">
+        </div>
+        <div class="form-group form-full">
+          <label>Resolution Notes</label>
+          <textarea id="maint-resolve-notes" placeholder="How was it resolved?"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-maintenance')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveMaintenance()">Save Request</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Dialog -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <h3 id="confirm-title">Are you sure?</h3>
+    <p id="confirm-msg">This action cannot be undone.</p>
+    <div class="buttons">
+      <button class="btn btn-secondary" onclick="closeConfirm()">Cancel</button>
+      <button class="btn btn-danger" id="confirm-ok-btn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- ==================== JAVASCRIPT ==================== -->
+<script>
+'use strict';
+
+// ==================== DATA STORE ====================
+const DB = {
+  get: (k, def = []) => { try { return JSON.parse(localStorage.getItem('oh_' + k)) ?? def; } catch { return def; } },
+  set: (k, v) => localStorage.setItem('oh_' + k, JSON.stringify(v)),
+};
+
+let data = {
+  properties: DB.get('properties'),
+  tenants: DB.get('tenants'),
+  payments: DB.get('payments'),   // { id, tenantId, month (YYYY-MM), amount, date, method, ref }
+  maintenance: DB.get('maintenance'),
+};
+
+function save(key) {
+  DB.set(key, data[key]);
+}
+
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+
+// ==================== NAVIGATION ====================
+let currentView = 'dashboard';
+const viewMeta = {
+  dashboard:    { title: 'Dashboard',           sub: 'Property overview' },
+  notifications:{ title: 'Notifications',       sub: 'Alerts & reminders' },
+  properties:   { title: 'Properties',          sub: 'Manage your properties' },
+  tenants:      { title: 'Tenants',             sub: 'Manage tenants & leases' },
+  rent:         { title: 'Rent Tracking',       sub: 'Record & track payments' },
+  maintenance:  { title: 'Maintenance',         sub: 'Track maintenance requests' },
+  reports:      { title: 'Reports',             sub: 'Summaries & print reports' },
+};
+
+const topbarActions = {
+  properties:   () => `<button class="btn btn-primary" onclick="openPropertyModal()">＋ Add Property</button>`,
+  tenants:      () => `<button class="btn btn-primary" onclick="openTenantModal()">＋ Add Tenant</button>`,
+  maintenance:  () => `<button class="btn btn-primary" onclick="openMaintenanceModal()">＋ Log Request</button>`,
+  reports:      () => `<button class="btn btn-secondary" onclick="window.print()">🖨 Print Report</button>`,
+  rent:         () => ``,
+  dashboard:    () => ``,
+  notifications:() => ``,
+};
+
+function navigate(view) {
+  currentView = view;
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.view === view));
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + view));
+  const meta = viewMeta[view] || {};
+  document.getElementById('page-title').textContent = meta.title || view;
+  document.getElementById('page-subtitle').textContent = meta.sub || '';
+  document.getElementById('topbar-actions').innerHTML = (topbarActions[view] || (() => ''))();
+  renderCurrentView();
+}
+
+document.querySelectorAll('.nav-item').forEach(el => {
+  el.addEventListener('click', () => navigate(el.dataset.view));
+});
+
+function renderCurrentView() {
+  switch (currentView) {
+    case 'dashboard':    renderDashboard(); break;
+    case 'notifications':renderNotifications(); break;
+    case 'properties':   renderProperties(); break;
+    case 'tenants':      renderTenants(); break;
+    case 'rent':         renderRent(); break;
+    case 'maintenance':  renderMaintenance(); break;
+    case 'reports':      renderReports(); break;
+  }
+}
+
+// ==================== FORMATTING ====================
+const fmt = n => 'KES ' + Number(n || 0).toLocaleString('en-KE', { minimumFractionDigits: 0 });
+const fmtDate = d => d ? new Date(d).toLocaleDateString('en-KE', { day:'2-digit', month:'short', year:'numeric' }) : '—';
+const today = () => new Date().toISOString().slice(0, 10);
+const monthKey = (y, m) => `${y}-${String(m + 1).padStart(2, '0')}`;
+const monthLabel = (y, m) => new Date(y, m, 1).toLocaleDateString('en-KE', { month: 'long', year: 'numeric' });
+
+function daysUntil(dateStr) {
+  if (!dateStr) return null;
+  return Math.ceil((new Date(dateStr) - new Date()) / 86400000);
+}
+
+function leaseStatus(tenant) {
+  const d = daysUntil(tenant.leaseEnd);
+  if (d === null) return 'active';
+  if (d < 0) return 'expired';
+  if (d <= 30) return 'expiring';
+  return 'active';
+}
+
+function leaseBadge(status) {
+  const map = { active: 'badge-green', expiring: 'badge-yellow', expired: 'badge-red' };
+  const labels = { active: 'Active', expiring: 'Expiring Soon', expired: 'Expired' };
+  return `<span class="badge ${map[status]}">${labels[status]}</span>`;
+}
+
+function paymentStatusBadge(status) {
+  const map = { paid: 'badge-green', partial: 'badge-yellow', unpaid: 'badge-red' };
+  return `<span class="badge ${map[status]}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>`;
+}
+
+function maintStatusBadge(status) {
+  const map = { open: 'badge-red', 'in-progress': 'badge-yellow', resolved: 'badge-green' };
+  const labels = { open: 'Open', 'in-progress': 'In Progress', resolved: 'Resolved' };
+  return `<span class="badge ${map[status]}">${labels[status] || status}</span>`;
+}
+
+function priorityBadge(p) {
+  const map = { low: 'badge-gray', medium: 'badge-blue', high: 'badge-yellow', urgent: 'badge-red' };
+  return `<span class="badge ${map[p] || 'badge-gray'}">${p}</span>`;
+}
+
+function propName(id) {
+  const p = data.properties.find(x => x.id === id);
+  return p ? p.name : '—';
+}
+
+// ==================== RENT HELPERS ====================
+let rentYear = new Date().getFullYear();
+let rentMonth = new Date().getMonth();
+
+function getTenantPaymentsForMonth(tenantId, mk) {
+  return data.payments.filter(p => p.tenantId === tenantId && p.month === mk);
+}
+
+function getTenantPaidTotal(tenantId, mk) {
+  return getTenantPaymentsForMonth(tenantId, mk).reduce((s, p) => s + Number(p.amount), 0);
+}
+
+function getRentStatus(tenant, mk) {
+  const due = Number(tenant.monthlyRent) || 0;
+  const paid = getTenantPaidTotal(tenant.id, mk);
+  if (paid >= due) return 'paid';
+  if (paid > 0) return 'partial';
+  return 'unpaid';
+}
+
+// ==================== DASHBOARD ====================
+function renderDashboard() {
+  const totalProps = data.properties.length;
+  const totalTenants = data.tenants.length;
+  const totalUnits = data.properties.reduce((s, p) => s + Number(p.units || 0), 0);
+
+  const mk = monthKey(new Date().getFullYear(), new Date().getMonth());
+  let rentCollected = 0, outstanding = 0;
+
+  data.tenants.forEach(t => {
+    const due = Number(t.monthlyRent) || 0;
+    const paid = getTenantPaidTotal(t.id, mk);
+    rentCollected += paid;
+    if (paid < due) outstanding += (due - paid);
+  });
+
+  const occupied = data.tenants.filter(t => leaseStatus(t) === 'active' || leaseStatus(t) === 'expiring').length;
+  const occRate = totalUnits > 0 ? Math.round((occupied / totalUnits) * 100) : 0;
+
+  document.getElementById('dash-stats').innerHTML = `
+    <div class="stat-card">
+      <div class="label">Total Properties</div>
+      <div class="value">${totalProps}</div>
+      <div class="sub">${totalUnits} total units</div>
+      <div class="icon">🏢</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Total Tenants</div>
+      <div class="value">${totalTenants}</div>
+      <div class="sub">${occupied} active leases</div>
+      <div class="icon">👥</div>
+    </div>
+    <div class="stat-card green">
+      <div class="label">Rent Collected (This Month)</div>
+      <div class="value">${fmt(rentCollected)}</div>
+      <div class="sub">${new Date().toLocaleDateString('en-KE',{month:'long',year:'numeric'})}</div>
+      <div class="icon">💵</div>
+    </div>
+    <div class="stat-card red">
+      <div class="label">Outstanding Balance</div>
+      <div class="value">${fmt(outstanding)}</div>
+      <div class="sub">Across all tenants</div>
+      <div class="icon">⚠️</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Occupancy Rate</div>
+      <div class="value">${occRate}%</div>
+      <div class="sub">${occupied} of ${totalUnits} units occupied</div>
+      <div class="icon">📈</div>
+    </div>
+    <div class="stat-card yellow">
+      <div class="label">Open Maintenance</div>
+      <div class="value">${data.maintenance.filter(m=>m.status==='open').length}</div>
+      <div class="sub">${data.maintenance.filter(m=>m.status==='in-progress').length} in progress</div>
+      <div class="icon">🔧</div>
+    </div>
+  `;
+
+  // Recent tenants
+  const recentTenants = [...data.tenants].slice(-5).reverse();
+  document.getElementById('dash-tenants').innerHTML = recentTenants.length
+    ? recentTenants.map(t => `
+        <div class="dash-row">
+          <div class="dash-row-left">
+            <div class="name">${t.name}</div>
+            <div class="meta">${propName(t.propertyId)} ${t.unit ? '· ' + t.unit : ''}</div>
+          </div>
+          <div class="dash-row-right">${leaseBadge(leaseStatus(t))}</div>
+        </div>`).join('')
+    : '<div class="empty-state"><div class="icon">👥</div><p>No tenants yet</p></div>';
+
+  // Outstanding balances
+  const balances = data.tenants
+    .map(t => ({ t, bal: (Number(t.monthlyRent)||0) - getTenantPaidTotal(t.id, mk) }))
+    .filter(x => x.bal > 0)
+    .sort((a,b) => b.bal - a.bal).slice(0, 5);
+
+  document.getElementById('dash-balances').innerHTML = balances.length
+    ? balances.map(({t, bal}) => `
+        <div class="dash-row">
+          <div class="dash-row-left">
+            <div class="name">${t.name}</div>
+            <div class="meta">${propName(t.propertyId)}</div>
+          </div>
+          <div class="dash-row-right">
+            <div style="color:var(--red);font-weight:700;font-size:13px;">${fmt(bal)}</div>
+          </div>
+        </div>`).join('')
+    : '<div class="empty-state"><div class="icon">✅</div><p>No outstanding balances</p></div>';
+
+  // Properties list
+  document.getElementById('dash-properties').innerHTML = data.properties.length
+    ? data.properties.slice(0,5).map(p => {
+        const tenants = data.tenants.filter(t => t.propertyId === p.id).length;
+        const occ = Math.round((tenants / (Number(p.units)||1)) * 100);
+        return `
+          <div class="dash-row">
+            <div class="dash-row-left">
+              <div class="name">${p.name}</div>
+              <div class="meta">${p.type} · ${p.units} units</div>
+            </div>
+            <div class="dash-row-right">
+              <div style="font-size:13px;font-weight:600;color:var(--brand-light);">${occ}% occupied</div>
+            </div>
+          </div>`;}).join('')
+    : '<div class="empty-state"><div class="icon">🏢</div><p>No properties yet</p></div>';
+
+  // Open maintenance
+  const openMaint = data.maintenance.filter(m => m.status === 'open' || m.status === 'in-progress').slice(0,5);
+  document.getElementById('dash-maintenance').innerHTML = openMaint.length
+    ? openMaint.map(m => `
+        <div class="dash-row">
+          <div class="dash-row-left">
+            <div class="name">${m.title}</div>
+            <div class="meta">${propName(m.propertyId)} ${m.unit ? '· '+m.unit : ''}</div>
+          </div>
+          <div class="dash-row-right">${maintStatusBadge(m.status)}</div>
+        </div>`).join('')
+    : '<div class="empty-state"><div class="icon">✅</div><p>No open requests</p></div>';
+}
+
+// ==================== NOTIFICATIONS ====================
+function getAlerts() {
+  const alerts = [];
+  const mk = monthKey(new Date().getFullYear(), new Date().getMonth());
+
+  // Overdue rent
+  data.tenants.forEach(t => {
+    const status = getRentStatus(t, mk);
+    if (status === 'unpaid') {
+      alerts.push({ type: 'danger', icon: '🔴', title: 'Overdue Rent', desc: `${t.name} has not paid rent for ${monthLabel(new Date().getFullYear(), new Date().getMonth())}.` });
+    } else if (status === 'partial') {
+      const due = Number(t.monthlyRent) || 0;
+      const paid = getTenantPaidTotal(t.id, mk);
+      alerts.push({ type: 'warning', icon: '🟡', title: 'Partial Payment', desc: `${t.name} has paid ${fmt(paid)} of ${fmt(due)}. Balance: ${fmt(due-paid)}.` });
+    }
+  });
+
+  // Expiring leases
+  data.tenants.forEach(t => {
+    const d = daysUntil(t.leaseEnd);
+    if (d !== null && d >= 0 && d <= 30) {
+      alerts.push({ type: 'warning', icon: '📅', title: 'Lease Expiring Soon', desc: `${t.name}'s lease expires in ${d} day${d===1?'':'s'} (${fmtDate(t.leaseEnd)}).` });
+    } else if (d !== null && d < 0) {
+      alerts.push({ type: 'danger', icon: '⛔', title: 'Lease Expired', desc: `${t.name}'s lease expired on ${fmtDate(t.leaseEnd)}.` });
+    }
+  });
+
+  // Open maintenance
+  const openMaint = data.maintenance.filter(m => m.status === 'open');
+  if (openMaint.length > 0) {
+    alerts.push({ type: 'info', icon: '🔧', title: `${openMaint.length} Open Maintenance Request${openMaint.length>1?'s':''}`, desc: openMaint.map(m => `${propName(m.propertyId)}: ${m.title}`).join(', ') + '.' });
+  }
+
+  return alerts;
+}
+
+function renderNotifications() {
+  const alerts = getAlerts();
+  const badge = document.getElementById('notif-badge');
+  if (alerts.length > 0) {
+    badge.textContent = alerts.length;
+    badge.style.display = '';
+  } else {
+    badge.style.display = 'none';
+  }
+
+  if (alerts.length === 0) {
+    document.getElementById('notif-content').innerHTML = `
+      <div class="empty-state" style="padding:60px;">
+        <div class="icon">✅</div>
+        <p style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px;">All clear!</p>
+        <p>No notifications at this time.</p>
+      </div>`;
+    return;
+  }
+
+  document.getElementById('notif-content').innerHTML = `
+    <div class="alert-list">
+      ${alerts.map(a => `
+        <div class="alert-item ${a.type}">
+          <div class="alert-icon">${a.icon}</div>
+          <div class="alert-content">
+            <div class="title">${a.title}</div>
+            <div class="desc">${a.desc}</div>
+          </div>
+        </div>`).join('')}
+    </div>`;
+}
+
+function updateNotifBadge() {
+  const alerts = getAlerts();
+  const badge = document.getElementById('notif-badge');
+  if (alerts.length > 0) {
+    badge.textContent = alerts.length;
+    badge.style.display = '';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+// ==================== PROPERTIES ====================
+function renderProperties() {
+  const q = document.getElementById('prop-search').value.toLowerCase();
+  const typeF = document.getElementById('prop-type-filter').value;
+
+  const filtered = data.properties.filter(p =>
+    (!q || p.name.toLowerCase().includes(q) || p.address.toLowerCase().includes(q)) &&
+    (!typeF || p.type === typeF)
+  );
+
+  document.getElementById('prop-tbody').innerHTML = filtered.length
+    ? filtered.map(p => {
+        const tenants = data.tenants.filter(t => t.propertyId === p.id).length;
+        const units = Number(p.units) || 0;
+        const occ = units > 0 ? Math.round((tenants / units) * 100) : 0;
+        const typeMap = { apartment: '🏢', house: '🏠', commercial: '🏪' };
+        return `<tr>
+          <td><strong>${p.name}</strong>${p.description ? '<br><small style="color:var(--text3)">' + p.description + '</small>' : ''}</td>
+          <td style="color:var(--text2)">${p.address}</td>
+          <td><span class="badge badge-brand">${typeMap[p.type]||''} ${p.type}</span></td>
+          <td>${p.units}</td>
+          <td><strong>${fmt(p.monthlyRent)}</strong></td>
+          <td>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div class="progress-bar" style="width:60px;"><div class="progress-fill" style="width:${occ}%"></div></div>
+              <span style="font-size:12px;color:var(--text2)">${tenants}/${units}</span>
+            </div>
+          </td>
+          <td>
+            <div class="actions-cell">
+              <button class="btn btn-secondary btn-sm" onclick="openPropertyModal('${p.id}')">Edit</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteProperty('${p.id}')">Delete</button>
+            </div>
+          </td>
+        </tr>`;}).join('')
+    : `<tr><td colspan="7"><div class="empty-state"><div class="icon">🏢</div><p>No properties found. Add one to get started.</p></div></td></tr>`;
+}
+
+let editingPropertyId = null;
+
+function openPropertyModal(id = null) {
+  editingPropertyId = id;
+  const p = id ? data.properties.find(x => x.id === id) : null;
+  document.getElementById('prop-modal-title').textContent = id ? 'Edit Property' : 'Add Property';
+  document.getElementById('prop-name').value = p?.name || '';
+  document.getElementById('prop-address').value = p?.address || '';
+  document.getElementById('prop-type').value = p?.type || 'apartment';
+  document.getElementById('prop-units').value = p?.units || '';
+  document.getElementById('prop-rent').value = p?.monthlyRent || '';
+  document.getElementById('prop-desc').value = p?.description || '';
+  openModal('modal-property');
+}
+
+function saveProperty() {
+  const name = document.getElementById('prop-name').value.trim();
+  const address = document.getElementById('prop-address').value.trim();
+  const units = document.getElementById('prop-units').value;
+  const monthlyRent = document.getElementById('prop-rent').value;
+
+  if (!name || !address || !units || !monthlyRent) { showToast('Please fill in all required fields.', 'error'); return; }
+
+  if (editingPropertyId) {
+    const idx = data.properties.findIndex(p => p.id === editingPropertyId);
+    if (idx !== -1) {
+      data.properties[idx] = { ...data.properties[idx],
+        name, address, type: document.getElementById('prop-type').value,
+        units: Number(units), monthlyRent: Number(monthlyRent),
+        description: document.getElementById('prop-desc').value.trim()
+      };
+    }
+  } else {
+    data.properties.push({
+      id: uid(), name, address,
+      type: document.getElementById('prop-type').value,
+      units: Number(units), monthlyRent: Number(monthlyRent),
+      description: document.getElementById('prop-desc').value.trim(),
+      createdAt: today()
+    });
+  }
+
+  save('properties');
+  closeModal('modal-property');
+  renderProperties();
+  updateNotifBadge();
+  showToast(editingPropertyId ? 'Property updated.' : 'Property added successfully.', 'success');
+}
+
+function deleteProperty(id) {
+  const p = data.properties.find(x => x.id === id);
+  if (!p) return;
+  const tenantCount = data.tenants.filter(t => t.propertyId === id).length;
+  confirmDialog(
+    'Delete Property',
+    `Delete "${p.name}"?${tenantCount > 0 ? ` This property has ${tenantCount} tenant(s). They will not be deleted but will be unlinked.` : ''}`,
+    () => {
+      data.properties = data.properties.filter(x => x.id !== id);
+      save('properties');
+      renderProperties();
+      updateNotifBadge();
+      showToast('Property deleted.', 'success');
+    }
+  );
+}
+
+// ==================== TENANTS ====================
+function renderTenants() {
+  const q = document.getElementById('tenant-search').value.toLowerCase();
+  const propF = document.getElementById('tenant-prop-filter').value;
+  const statusF = document.getElementById('tenant-status-filter').value;
+
+  // Populate property filter
+  const propSel = document.getElementById('tenant-prop-filter');
+  const currentPropVal = propSel.value;
+  propSel.innerHTML = '<option value="">All Properties</option>' +
+    data.properties.map(p => `<option value="${p.id}" ${p.id===currentPropVal?'selected':''}>${p.name}</option>`).join('');
+
+  const filtered = data.tenants.filter(t => {
+    const s = leaseStatus(t);
+    return (!q || t.name.toLowerCase().includes(q) || (t.email||'').toLowerCase().includes(q) || (t.phone||'').toLowerCase().includes(q)) &&
+      (!propF || t.propertyId === propF) &&
+      (!statusF || s === statusF);
+  });
+
+  document.getElementById('tenant-tbody').innerHTML = filtered.length
+    ? filtered.map(t => {
+        const s = leaseStatus(t);
+        const d = daysUntil(t.leaseEnd);
+        const leaseInfo = s === 'expiring' ? ` <span style="font-size:11px;color:var(--yellow)">(${d}d left)</span>` :
+                          s === 'expired' ? ` <span style="font-size:11px;color:var(--red)">(expired)</span>` : '';
+        return `<tr>
+          <td><strong>${t.name}</strong>${t.email ? '<br><small style="color:var(--text3)">' + t.email + '</small>' : ''}</td>
+          <td>${t.phone || '—'}</td>
+          <td>${propName(t.propertyId)}${t.unit ? '<br><small style="color:var(--text3)">Unit: ' + t.unit + '</small>' : ''}</td>
+          <td style="font-size:12px;color:var(--text2)">${fmtDate(t.leaseStart)} → ${fmtDate(t.leaseEnd)}${leaseInfo}</td>
+          <td><strong>${fmt(t.monthlyRent)}</strong></td>
+          <td>${leaseBadge(s)}</td>
+          <td>
+            <div class="actions-cell">
+              <button class="btn btn-secondary btn-sm" onclick="openTenantModal('${t.id}')">Edit</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteTenant('${t.id}')">Delete</button>
+            </div>
+          </td>
+        </tr>`;}).join('')
+    : `<tr><td colspan="7"><div class="empty-state"><div class="icon">👥</div><p>No tenants found. Add one to get started.</p></div></td></tr>`;
+}
+
+let editingTenantId = null;
+
+function openTenantModal(id = null) {
+  editingTenantId = id;
+  const t = id ? data.tenants.find(x => x.id === id) : null;
+  document.getElementById('tenant-modal-title').textContent = id ? 'Edit Tenant' : 'Add Tenant';
+
+  const propSel = document.getElementById('tenant-prop');
+  propSel.innerHTML = '<option value="">Select property...</option>' +
+    data.properties.map(p => `<option value="${p.id}" ${p.id===t?.propertyId?'selected':''}>${p.name}</option>`).join('');
+
+  document.getElementById('tenant-name').value = t?.name || '';
+  document.getElementById('tenant-phone').value = t?.phone || '';
+  document.getElementById('tenant-email').value = t?.email || '';
+  document.getElementById('tenant-unit').value = t?.unit || '';
+  document.getElementById('tenant-start').value = t?.leaseStart || '';
+  document.getElementById('tenant-end').value = t?.leaseEnd || '';
+  document.getElementById('tenant-rent').value = t?.monthlyRent || '';
+  document.getElementById('tenant-notes').value = t?.notes || '';
+
+  if (t?.propertyId) populateUnitOptions();
+  openModal('modal-tenant');
+}
+
+function populateUnitOptions() {
+  const propId = document.getElementById('tenant-prop').value;
+  const prop = data.properties.find(p => p.id === propId);
+  if (prop) {
+    document.getElementById('tenant-rent').value = document.getElementById('tenant-rent').value || prop.monthlyRent;
+  }
+}
+
+function saveTenant() {
+  const name = document.getElementById('tenant-name').value.trim();
+  const phone = document.getElementById('tenant-phone').value.trim();
+  const propertyId = document.getElementById('tenant-prop').value;
+  const leaseStart = document.getElementById('tenant-start').value;
+  const leaseEnd = document.getElementById('tenant-end').value;
+
+  if (!name || !phone || !propertyId || !leaseStart || !leaseEnd) { showToast('Please fill in all required fields.', 'error'); return; }
+
+  const tenant = {
+    name, phone,
+    email: document.getElementById('tenant-email').value.trim(),
+    propertyId,
+    unit: document.getElementById('tenant-unit').value.trim(),
+    leaseStart, leaseEnd,
+    monthlyRent: Number(document.getElementById('tenant-rent').value) || 0,
+    notes: document.getElementById('tenant-notes').value.trim()
+  };
+
+  if (editingTenantId) {
+    const idx = data.tenants.findIndex(t => t.id === editingTenantId);
+    if (idx !== -1) data.tenants[idx] = { ...data.tenants[idx], ...tenant };
+  } else {
+    data.tenants.push({ id: uid(), ...tenant, createdAt: today() });
+  }
+
+  save('tenants');
+  closeModal('modal-tenant');
+  renderTenants();
+  updateNotifBadge();
+  showToast(editingTenantId ? 'Tenant updated.' : 'Tenant added successfully.', 'success');
+}
+
+function deleteTenant(id) {
+  const t = data.tenants.find(x => x.id === id);
+  if (!t) return;
+  confirmDialog('Delete Tenant', `Delete "${t.name}"? Their payment history will also be removed.`, () => {
+    data.tenants = data.tenants.filter(x => x.id !== id);
+    data.payments = data.payments.filter(p => p.tenantId !== id);
+    save('tenants'); save('payments');
+    renderTenants();
+    updateNotifBadge();
+    showToast('Tenant deleted.', 'success');
+  });
+}
+
+// ==================== RENT TRACKING ====================
+function changeMonth(dir) {
+  rentMonth += dir;
+  if (rentMonth < 0) { rentMonth = 11; rentYear--; }
+  if (rentMonth > 11) { rentMonth = 0; rentYear++; }
+  renderRent();
+}
+
+function renderRent() {
+  const mk = monthKey(rentYear, rentMonth);
+  document.getElementById('month-display').textContent = monthLabel(rentYear, rentMonth);
+
+  const q = document.getElementById('rent-search').value.toLowerCase();
+  const statusF = document.getElementById('rent-status-filter').value;
+
+  const filtered = data.tenants.filter(t => {
+    const s = getRentStatus(t, mk);
+    return (!q || t.name.toLowerCase().includes(q)) && (!statusF || s === statusF);
+  });
+
+  let totalDue = 0, totalPaid = 0, totalUnpaid = 0;
+  data.tenants.forEach(t => {
+    const due = Number(t.monthlyRent) || 0;
+    const paid = getTenantPaidTotal(t.id, mk);
+    totalDue += due;
+    totalPaid += paid;
+    if (paid < due) totalUnpaid += (due - paid);
+  });
+
+  document.getElementById('rent-summary').innerHTML = `
+    <div class="rent-mini-stat green"><div class="val">${fmt(totalPaid)}</div><div class="lbl">Collected</div></div>
+    <div class="rent-mini-stat red"><div class="val">${fmt(totalUnpaid)}</div><div class="lbl">Outstanding</div></div>
+    <div class="rent-mini-stat"><div class="val">${fmt(totalDue)}</div><div class="lbl">Total Due</div></div>
+  `;
+
+  document.getElementById('rent-tbody').innerHTML = filtered.length
+    ? filtered.map(t => {
+        const due = Number(t.monthlyRent) || 0;
+        const paid = getTenantPaidTotal(t.id, mk);
+        const bal = due - paid;
+        const status = getRentStatus(t, mk);
+        return `<tr>
+          <td><strong>${t.name}</strong></td>
+          <td>${propName(t.propertyId)}${t.unit ? '<br><small style="color:var(--text3)">'+t.unit+'</small>' : ''}</td>
+          <td>${fmt(due)}</td>
+          <td style="color:var(--green);font-weight:600">${fmt(paid)}</td>
+          <td style="color:${bal>0?'var(--red)':'var(--text3)'};font-weight:${bal>0?'700':'400'}">${bal > 0 ? fmt(bal) : '—'}</td>
+          <td>${paymentStatusBadge(status)}</td>
+          <td>
+            <div class="actions-cell">
+              <button class="btn btn-primary btn-sm" onclick="openRentModal('${t.id}','${mk}')">Record Payment</button>
+              <button class="btn btn-secondary btn-sm" onclick="viewPaymentHistory('${t.id}','${mk}')">History</button>
+            </div>
+          </td>
+        </tr>`;}).join('')
+    : `<tr><td colspan="7"><div class="empty-state"><div class="icon">💰</div><p>No tenants found.</p></div></td></tr>`;
+}
+
+let currentRentTenantId = null;
+let currentRentMonthKey = null;
+
+function openRentModal(tenantId, mk) {
+  currentRentTenantId = tenantId;
+  currentRentMonthKey = mk;
+  const t = data.tenants.find(x => x.id === tenantId);
+  if (!t) return;
+
+  const due = Number(t.monthlyRent) || 0;
+  const paid = getTenantPaidTotal(tenantId, mk);
+  const bal = due - paid;
+
+  document.getElementById('rent-modal-title').textContent = `Record Payment — ${t.name}`;
+  document.getElementById('rent-modal-info').innerHTML = `
+    <strong>${t.name}</strong> · ${propName(t.propertyId)}${t.unit?' · '+t.unit:''}<br>
+    Month: <strong>${monthLabel(rentYear, rentMonth)}</strong><br>
+    Rent Due: <strong>${fmt(due)}</strong> &nbsp;|&nbsp; Paid: <strong style="color:var(--green)">${fmt(paid)}</strong> &nbsp;|&nbsp; Balance: <strong style="color:${bal>0?'var(--red)':'var(--green)'}">${fmt(bal)}</strong>
+  `;
+
+  document.getElementById('rent-amount-paid').value = '';
+  document.getElementById('rent-pay-date').value = today();
+  document.getElementById('rent-pay-method').value = 'mpesa';
+  document.getElementById('rent-pay-ref').value = '';
+
+  // Payment history for this month
+  const payments = getTenantPaymentsForMonth(tenantId, mk);
+  document.getElementById('rent-payment-history').innerHTML = payments.length ? `
+    <div class="payment-history">
+      <h4>Payments This Month</h4>
+      ${payments.map(p => `
+        <div class="payment-entry">
+          <span>${fmtDate(p.date)} · ${p.method}</span>
+          <span style="font-weight:600;color:var(--green)">${fmt(p.amount)}</span>
+          <button style="background:none;border:none;color:var(--red);cursor:pointer;font-size:12px;" onclick="deletePayment('${p.id}','${tenantId}','${mk}')">Remove</button>
+        </div>`).join('')}
+    </div>` : '';
+
+  openModal('modal-rent');
+}
+
+function saveRentPayment() {
+  const amount = Number(document.getElementById('rent-amount-paid').value);
+  if (!amount || amount <= 0) { showToast('Please enter a valid amount.', 'error'); return; }
+
+  const payment = {
+    id: uid(),
+    tenantId: currentRentTenantId,
+    month: currentRentMonthKey,
+    amount,
+    date: document.getElementById('rent-pay-date').value || today(),
+    method: document.getElementById('rent-pay-method').value,
+    ref: document.getElementById('rent-pay-ref').value.trim(),
+    createdAt: today()
+  };
+
+  data.payments.push(payment);
+  save('payments');
+  closeModal('modal-rent');
+  renderRent();
+  updateNotifBadge();
+  showToast('Payment recorded successfully.', 'success');
+}
+
+function deletePayment(payId, tenantId, mk) {
+  data.payments = data.payments.filter(p => p.id !== payId);
+  save('payments');
+  openRentModal(tenantId, mk);
+  renderRent();
+  showToast('Payment removed.', 'success');
+}
+
+function viewPaymentHistory(tenantId, mk) {
+  openRentModal(tenantId, mk);
+}
+
+// ==================== MAINTENANCE ====================
+function renderMaintenance() {
+  const q = document.getElementById('maint-search').value.toLowerCase();
+  const statusF = document.getElementById('maint-status-filter').value;
+  const propF = document.getElementById('maint-prop-filter').value;
+
+  // Populate property filter
+  const propSel = document.getElementById('maint-prop-filter');
+  const cur = propSel.value;
+  propSel.innerHTML = '<option value="">All Properties</option>' +
+    data.properties.map(p => `<option value="${p.id}" ${p.id===cur?'selected':''}>${p.name}</option>`).join('');
+
+  const filtered = data.maintenance.filter(m =>
+    (!q || m.title.toLowerCase().includes(q) || (m.description||'').toLowerCase().includes(q)) &&
+    (!statusF || m.status === statusF) &&
+    (!propF || m.propertyId === propF)
+  ).sort((a, b) => {
+    const order = { open: 0, 'in-progress': 1, resolved: 2 };
+    return (order[a.status]||9) - (order[b.status]||9);
+  });
+
+  const iconMap = { open: '🔴', 'in-progress': '🟡', resolved: '✅' };
+  const priorityColor = { low: 'var(--text3)', medium: 'var(--blue)', high: 'var(--yellow)', urgent: 'var(--red)' };
+
+  document.getElementById('maint-list').innerHTML = filtered.length
+    ? filtered.map(m => `
+        <div class="maint-card">
+          <div class="maint-icon ${m.status}">${iconMap[m.status]||'🔧'}</div>
+          <div class="maint-info">
+            <div class="maint-title">${m.title}</div>
+            <div class="maint-meta">
+              ${propName(m.propertyId)}${m.unit?' · '+m.unit:''} &nbsp;·&nbsp; Reported: ${fmtDate(m.reportedDate)} &nbsp;·&nbsp;
+              ${priorityBadge(m.priority)} &nbsp; ${maintStatusBadge(m.status)}
+              ${m.assignedTo ? ' &nbsp;·&nbsp; <span style="color:var(--text2)">Assigned: '+m.assignedTo+'</span>' : ''}
+            </div>
+            ${m.description ? `<div class="maint-desc">${m.description}</div>` : ''}
+            ${m.resolveNotes ? `<div class="maint-desc" style="color:var(--green);margin-top:6px;">✅ ${m.resolveNotes}</div>` : ''}
+          </div>
+          <div class="maint-actions">
+            ${m.status !== 'in-progress' && m.status !== 'resolved' ? `<button class="btn btn-secondary btn-sm" onclick="updateMaintStatus('${m.id}','in-progress')">In Progress</button>` : ''}
+            ${m.status !== 'resolved' ? `<button class="btn btn-secondary btn-sm" style="color:var(--green)" onclick="updateMaintStatus('${m.id}','resolved')">Resolve</button>` : ''}
+            <button class="btn btn-secondary btn-sm" onclick="openMaintenanceModal('${m.id}')">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteMaintenance('${m.id}')">Delete</button>
+          </div>
+        </div>`).join('')
+    : `<div class="empty-state" style="padding:40px;"><div class="icon">🔧</div><p>No maintenance requests found.</p></div>`;
+}
+
+let editingMaintId = null;
+
+function openMaintenanceModal(id = null) {
+  editingMaintId = id;
+  const m = id ? data.maintenance.find(x => x.id === id) : null;
+  document.getElementById('maint-modal-title').textContent = id ? 'Edit Maintenance Request' : 'Log Maintenance Request';
+
+  const propSel = document.getElementById('maint-prop');
+  propSel.innerHTML = '<option value="">Select property...</option>' +
+    data.properties.map(p => `<option value="${p.id}" ${p.id===m?.propertyId?'selected':''}>${p.name}</option>`).join('');
+
+  document.getElementById('maint-unit').value = m?.unit || '';
+  document.getElementById('maint-title').value = m?.title || '';
+  document.getElementById('maint-desc').value = m?.description || '';
+  document.getElementById('maint-priority').value = m?.priority || 'medium';
+  document.getElementById('maint-status').value = m?.status || 'open';
+  document.getElementById('maint-date').value = m?.reportedDate || today();
+  document.getElementById('maint-assign').value = m?.assignedTo || '';
+  document.getElementById('maint-resolve-notes').value = m?.resolveNotes || '';
+
+  openModal('modal-maintenance');
+}
+
+function saveMaintenance() {
+  const title = document.getElementById('maint-title').value.trim();
+  const propertyId = document.getElementById('maint-prop').value;
+  if (!title || !propertyId) { showToast('Please fill in required fields.', 'error'); return; }
+
+  const record = {
+    title, propertyId,
+    unit: document.getElementById('maint-unit').value.trim(),
+    description: document.getElementById('maint-desc').value.trim(),
+    priority: document.getElementById('maint-priority').value,
+    status: document.getElementById('maint-status').value,
+    reportedDate: document.getElementById('maint-date').value || today(),
+    assignedTo: document.getElementById('maint-assign').value.trim(),
+    resolveNotes: document.getElementById('maint-resolve-notes').value.trim()
+  };
+
+  if (editingMaintId) {
+    const idx = data.maintenance.findIndex(m => m.id === editingMaintId);
+    if (idx !== -1) data.maintenance[idx] = { ...data.maintenance[idx], ...record };
+  } else {
+    data.maintenance.push({ id: uid(), ...record, createdAt: today() });
+  }
+
+  save('maintenance');
+  closeModal('modal-maintenance');
+  renderMaintenance();
+  updateNotifBadge();
+  showToast(editingMaintId ? 'Request updated.' : 'Maintenance request logged.', 'success');
+}
+
+function updateMaintStatus(id, status) {
+  const idx = data.maintenance.findIndex(m => m.id === id);
+  if (idx !== -1) { data.maintenance[idx].status = status; save('maintenance'); renderMaintenance(); updateNotifBadge(); showToast(`Status updated to "${status}".`, 'success'); }
+}
+
+function deleteMaintenance(id) {
+  const m = data.maintenance.find(x => x.id === id);
+  if (!m) return;
+  confirmDialog('Delete Request', `Delete maintenance request "${m.title}"?`, () => {
+    data.maintenance = data.maintenance.filter(x => x.id !== id);
+    save('maintenance');
+    renderMaintenance();
+    updateNotifBadge();
+    showToast('Request deleted.', 'success');
+  });
+}
+
+// ==================== REPORTS ====================
+let currentReportTab = 'summary';
+
+function switchReportTab(tab, el) {
+  currentReportTab = tab;
+  document.querySelectorAll('#view-reports .tab').forEach(t => t.classList.toggle('active', t === el));
+  renderReports();
+}
+
+function renderReports() {
+  switch (currentReportTab) {
+    case 'summary':    renderSummaryReport(); break;
+    case 'occupancy':  renderOccupancyReport(); break;
+    case 'balances':   renderBalancesReport(); break;
+  }
+}
+
+function renderSummaryReport() {
+  const mk = monthKey(rentYear, rentMonth);
+  const label = monthLabel(rentYear, rentMonth);
+
+  let rows = data.tenants.map(t => {
+    const due = Number(t.monthlyRent) || 0;
+    const paid = getTenantPaidTotal(t.id, mk);
+    const bal = due - paid;
+    const status = getRentStatus(t, mk);
+    return { t, due, paid, bal, status };
+  });
+
+  const totalDue = rows.reduce((s,r)=>s+r.due, 0);
+  const totalPaid = rows.reduce((s,r)=>s+r.paid, 0);
+  const totalBal = rows.reduce((s,r)=>s+r.bal, 0);
+  const paidCount = rows.filter(r=>r.status==='paid').length;
+  const partialCount = rows.filter(r=>r.status==='partial').length;
+  const unpaidCount = rows.filter(r=>r.status==='unpaid').length;
+
+  document.getElementById('report-content').innerHTML = `
+    <div class="report-card">
+      <h3>Monthly Rent Summary — ${label}</h3>
+      <div class="stats-grid" style="margin-bottom:16px;">
+        <div class="stat-card green"><div class="label">Total Collected</div><div class="value">${fmt(totalPaid)}</div></div>
+        <div class="stat-card red"><div class="label">Outstanding</div><div class="value">${fmt(totalBal)}</div></div>
+        <div class="stat-card"><div class="label">Total Due</div><div class="value">${fmt(totalDue)}</div></div>
+      </div>
+      <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+        <span class="badge badge-green">✅ Paid: ${paidCount}</span>
+        <span class="badge badge-yellow">⚠ Partial: ${partialCount}</span>
+        <span class="badge badge-red">❌ Unpaid: ${unpaidCount}</span>
+      </div>
+      <table>
+        <thead><tr><th>Tenant</th><th>Property</th><th>Unit</th><th>Due</th><th>Paid</th><th>Balance</th><th>Status</th></tr></thead>
+        <tbody>
+          ${rows.map(r=>`<tr>
+            <td>${r.t.name}</td>
+            <td>${propName(r.t.propertyId)}</td>
+            <td>${r.t.unit||'—'}</td>
+            <td>${fmt(r.due)}</td>
+            <td style="color:var(--green)">${fmt(r.paid)}</td>
+            <td style="color:${r.bal>0?'var(--red)':'inherit'}">${r.bal>0?fmt(r.bal):'—'}</td>
+            <td>${paymentStatusBadge(r.status)}</td>
+          </tr>`).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--text3)">No tenants</td></tr>'}
+        </tbody>
+      </table>
+    </div>`;
+}
+
+function renderOccupancyReport() {
+  document.getElementById('report-content').innerHTML = `
+    <div class="report-card">
+      <h3>Occupancy Report</h3>
+      <table>
+        <thead><tr><th>Property</th><th>Type</th><th>Total Units</th><th>Occupied</th><th>Vacant</th><th>Occupancy Rate</th></tr></thead>
+        <tbody>
+          ${data.properties.map(p => {
+            const tenants = data.tenants.filter(t => t.propertyId === p.id && (leaseStatus(t)==='active'||leaseStatus(t)==='expiring')).length;
+            const units = Number(p.units)||0;
+            const rate = units>0 ? Math.round((tenants/units)*100) : 0;
+            const vacant = Math.max(0, units - tenants);
+            return `<tr>
+              <td><strong>${p.name}</strong><br><small style="color:var(--text3)">${p.address}</small></td>
+              <td><span class="badge badge-brand">${p.type}</span></td>
+              <td>${units}</td>
+              <td style="color:var(--green)">${tenants}</td>
+              <td style="color:${vacant>0?'var(--red)':'inherit'}">${vacant}</td>
+              <td>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <div class="progress-bar" style="width:80px;"><div class="progress-fill" style="width:${rate}%"></div></div>
+                  <strong>${rate}%</strong>
+                </div>
+              </td>
+            </tr>`;
+          }).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--text3)">No properties</td></tr>'}
+        </tbody>
+      </table>
+    </div>`;
+}
+
+function renderBalancesReport() {
+  const mk = monthKey(rentYear, rentMonth);
+  const rows = data.tenants
+    .map(t => ({ t, due: Number(t.monthlyRent)||0, paid: getTenantPaidTotal(t.id, mk) }))
+    .filter(r => r.paid < r.due)
+    .sort((a,b) => (b.due-b.paid)-(a.due-a.paid));
+
+  document.getElementById('report-content').innerHTML = `
+    <div class="report-card">
+      <h3>Outstanding Balances — ${monthLabel(rentYear, rentMonth)}</h3>
+      ${rows.length === 0
+        ? '<div class="empty-state"><div class="icon">✅</div><p>No outstanding balances this month!</p></div>'
+        : `<table>
+            <thead><tr><th>Tenant</th><th>Property</th><th>Unit</th><th>Rent Due</th><th>Paid</th><th>Balance</th><th>Days Overdue</th></tr></thead>
+            <tbody>
+              ${rows.map(r => {
+                const bal = r.due - r.paid;
+                const leaseStart = new Date(r.t.leaseStart);
+                const thisMonth = new Date(rentYear, rentMonth, 1);
+                return `<tr>
+                  <td><strong>${r.t.name}</strong><br><small>${r.t.phone||''}</small></td>
+                  <td>${propName(r.t.propertyId)}</td>
+                  <td>${r.t.unit||'—'}</td>
+                  <td>${fmt(r.due)}</td>
+                  <td style="color:var(--green)">${fmt(r.paid)}</td>
+                  <td style="color:var(--red);font-weight:700">${fmt(bal)}</td>
+                  <td style="color:var(--text3)">${Math.max(0, Math.floor((new Date()-thisMonth)/86400000))} days</td>
+                </tr>`;}).join('')}
+            </tbody>
+          </table>`}
+    </div>`;
+}
+
+// ==================== MODAL HELPERS ====================
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.classList.remove('open');
+  });
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+    closeConfirm();
+  }
+});
+
+// ==================== CONFIRM DIALOG ====================
+let confirmCallback = null;
+
+function confirmDialog(title, msg, cb) {
+  document.getElementById('confirm-title').textContent = title;
+  document.getElementById('confirm-msg').textContent = msg;
+  confirmCallback = cb;
+  document.getElementById('confirm-overlay').classList.add('open');
+  document.getElementById('confirm-ok-btn').onclick = () => { cb(); closeConfirm(); };
+}
+
+function closeConfirm() {
+  document.getElementById('confirm-overlay').classList.remove('open');
+  confirmCallback = null;
+}
+
+// ==================== TOAST ====================
+function showToast(msg, type = 'success') {
+  const icons = { success: '✅', error: '❌' };
+  const container = document.getElementById('toast-container');
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `<span>${icons[type]||'ℹ️'}</span> ${msg}`;
+  container.appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity 0.3s'; setTimeout(() => el.remove(), 350); }, 3000);
+}
+
+// ==================== SEED DEMO DATA ====================
+function seedDemoData() {
+  if (data.properties.length > 0) return;
+
+  const p1 = { id: uid(), name: 'Sunrise Apartments', address: 'Westlands, Nairobi', type: 'apartment', units: 12, monthlyRent: 25000, description: '3-storey building', createdAt: today() };
+  const p2 = { id: uid(), name: 'Greenview House', address: 'Karen, Nairobi', type: 'house', units: 4, monthlyRent: 45000, description: 'Gated community', createdAt: today() };
+  const p3 = { id: uid(), name: 'City Commerce Plaza', address: 'CBD, Nairobi', type: 'commercial', units: 8, monthlyRent: 60000, description: 'Ground floor shops', createdAt: today() };
+
+  data.properties = [p1, p2, p3];
+
+  const t1 = { id: uid(), name: 'John Kamau', phone: '+254 712 345 678', email: 'john@email.com', propertyId: p1.id, unit: '2A', leaseStart: '2024-01-01', leaseEnd: '2025-12-31', monthlyRent: 25000, notes: '', createdAt: today() };
+  const t2 = { id: uid(), name: 'Mary Wanjiku', phone: '+254 722 111 222', email: 'mary@email.com', propertyId: p1.id, unit: '3B', leaseStart: '2024-03-01', leaseEnd: '2026-02-28', monthlyRent: 25000, notes: '', createdAt: today() };
+  const t3 = { id: uid(), name: 'David Ochieng', phone: '+254 733 444 555', email: '', propertyId: p2.id, unit: 'Unit 1', leaseStart: '2023-06-01', leaseEnd: '2026-01-15', monthlyRent: 45000, notes: 'Pays on 5th', createdAt: today() };
+  const t4 = { id: uid(), name: 'Grace Muthoni', phone: '+254 741 222 333', email: 'grace@email.com', propertyId: p3.id, unit: 'Shop 3', leaseStart: '2025-01-01', leaseEnd: '2026-06-30', monthlyRent: 60000, notes: '', createdAt: today() };
+
+  data.tenants = [t1, t2, t3, t4];
+
+  const mk = monthKey(new Date().getFullYear(), new Date().getMonth());
+  data.payments = [
+    { id: uid(), tenantId: t1.id, month: mk, amount: 25000, date: today(), method: 'mpesa', ref: 'QJX123ABC', createdAt: today() },
+    { id: uid(), tenantId: t2.id, month: mk, amount: 15000, date: today(), method: 'cash', ref: '', createdAt: today() },
+    { id: uid(), tenantId: t4.id, month: mk, amount: 60000, date: today(), method: 'bank', ref: 'TXN-2024-001', createdAt: today() },
+  ];
+
+  data.maintenance = [
+    { id: uid(), propertyId: p1.id, unit: '2A', title: 'Leaking Pipe in Bathroom', description: 'Water dripping from ceiling pipe.', priority: 'high', status: 'open', reportedDate: today(), assignedTo: '', resolveNotes: '', createdAt: today() },
+    { id: uid(), propertyId: p2.id, unit: 'Unit 1', title: 'Broken Window Lock', description: 'Bedroom window lock is broken.', priority: 'medium', status: 'in-progress', reportedDate: today(), assignedTo: 'Juma Fundi', resolveNotes: '', createdAt: today() },
+    { id: uid(), propertyId: p1.id, unit: 'Common Area', title: 'Generator Service', description: 'Monthly service due.', priority: 'low', status: 'resolved', reportedDate: today(), assignedTo: 'Power Services Ltd', resolveNotes: 'Serviced and oil changed.', createdAt: today() },
+  ];
+
+  save('properties'); save('tenants'); save('payments'); save('maintenance');
+}
+
+// ==================== INIT ====================
+seedDemoData();
+rentYear = new Date().getFullYear();
+rentMonth = new Date().getMonth();
+updateNotifBadge();
+renderDashboard();
+</script>
+</body>
+</html>
