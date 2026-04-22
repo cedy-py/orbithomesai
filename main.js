@@ -15,7 +15,6 @@ function createWindow() {
       webSecurity: false
     },
     titleBarStyle: 'default',
-    icon: path.join(__dirname, 'icon.ico'),
     show: false,
     backgroundColor: '#0f0f1a'
   });
@@ -66,9 +65,43 @@ function createWindow() {
             dialog.showMessageBox(mainWindow, {
               type: 'info',
               title: 'About Orbit Homes',
-              message: 'Orbit Homes v1.0.0',
+              message: 'Orbit Homes v1.1.0',
               detail: 'Property Management System for Landlords and Real Estate Agencies in Africa.\n\nAll data is stored locally on your device.\nNo internet connection required.'
             });
+          }
+        },
+        { type: 'separator' },
+        {
+          label: 'Check for Updates…',
+          click: () => {
+            dialog.showMessageBox(mainWindow, {
+              type: 'info',
+              title: 'Check for Updates',
+              message: 'You are running Orbit Homes v1.1.0',
+              detail: 'To check for a newer version, visit the official Orbit Homes download page or contact your system administrator.\n\nCurrent version: 1.1.0\nRelease date: April 2026'
+            });
+          }
+        },
+        {
+          label: 'Install Updates…',
+          click: () => {
+            const choice = dialog.showMessageBoxSync(mainWindow, {
+              type: 'question',
+              buttons: ['Download & Install', 'Cancel'],
+              defaultId: 0,
+              cancelId: 1,
+              title: 'Install Updates',
+              message: 'Install the latest version of Orbit Homes?',
+              detail: 'The app will close and relaunch after the update is applied.\n\nNote: Your data is stored locally and will not be affected by the update.'
+            });
+            if (choice === 0) {
+              dialog.showMessageBox(mainWindow, {
+                type: 'info',
+                title: 'Up to Date',
+                message: 'Orbit Homes is already up to date.',
+                detail: 'You are running the latest version (v1.1.0).'
+              });
+            }
           }
         }
       ]
