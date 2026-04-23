@@ -8,7 +8,7 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 :root{
-  --brand:#6C3FC5;--brand-light:#8B5CF6;--brand-dark:#4C2A8A;--brand-glow:rgba(108,63,197,0.22);
+  --brand:#00AEEF;--brand-light:#33C4FF;--brand-dark:#0090CC;--brand-glow:rgba(0,174,239,0.15);
   --accent:#1A6B3C;--accent-light:#27ae60;--accent-bg:rgba(26,107,60,0.15);
   --bg:#0f0f1a;--bg2:#14141f;--bg3:#1a1a2e;--bg4:#20203a;
   --card:#16162a;--card2:#1c1c32;
@@ -26,7 +26,7 @@
 body.light{
   --bg:#f1f5f9;--bg2:#ffffff;--bg3:#e8edf5;--bg4:#dde3ee;
   --card:#ffffff;--card2:#f8fafc;
-  --border:rgba(108,63,197,0.18);--border2:rgba(0,0,0,0.08);
+  --border:rgba(0,174,239,0.18);--border2:rgba(0,0,0,0.08);
   --text:#1e293b;--text2:#475569;--text3:#64748b;
   --shadow:0 4px 24px rgba(0,0,0,0.1);
 }
@@ -319,12 +319,13 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
 
   .print-brand-header{
     display:flex!important;align-items:center;justify-content:space-between;
-    padding:0 0 16px;border-bottom:3px solid #6C3FC5;margin-bottom:24px;
+    padding:0 0 16px;border-bottom:3px solid #00AEEF;margin-bottom:24px;
   }
   .print-brand-header .pb-logo{display:flex;align-items:center;gap:12px}
-  .print-brand-header .pb-icon{width:40px;height:40px;background:#6C3FC5;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff}
-  .print-brand-header .pb-name{font-size:20px;font-weight:800;color:#6C3FC5}
+  .print-brand-header .pb-icon{width:40px;height:40px;background:#00AEEF;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff}
+  .print-brand-header .pb-name{font-size:20px;font-weight:800;color:#00AEEF}
   .print-brand-header .pb-tagline{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.5px}
+  .print-brand-header .pb-address{font-size:10px;color:#888;margin-top:1px}
   .print-brand-header .pb-meta{text-align:right;font-size:11px;color:#64748b}
   .print-brand-header .pb-meta strong{display:block;font-size:14px;color:#111;margin-bottom:2px}
 
@@ -333,14 +334,14 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
   .stat-card{background:#f8f9fc!important;border:1px solid #ddd!important;break-inside:avoid}
   .stat-card .value{font-size:22px}
   table{font-size:11px;border-collapse:collapse;width:100%}
-  thead th{background:#f3f0ff!important;color:#4C2A8A!important;border:1px solid #ddd;padding:7px 10px}
+  thead th{background:#e8f7fd!important;color:#0090CC!important;border:1px solid #ddd;padding:7px 10px}
   tbody td{border:1px solid #eee;padding:7px 10px;color:#111}
   tbody tr:nth-child(even) td{background:#fafafa}
   .badge{border:1px solid #ccc;background:#f5f5f5!important;color:#333!important;font-size:10px}
   .badge-green{background:#e8f5e9!important;color:#1A6B3C!important;border-color:#1A6B3C!important}
   .badge-red{background:#ffeaea!important;color:#c0392b!important;border-color:#c0392b!important}
   .badge-yellow{background:#fff8e1!important;color:#b7770d!important;border-color:#b7770d!important}
-  .badge-brand{background:#f3f0ff!important;color:#6C3FC5!important;border-color:#6C3FC5!important}
+  .badge-brand{background:#e8f7fd!important;color:#0090CC!important;border-color:#0090CC!important}
   .progress-bar{background:#eee!important}
   .progress-fill{background:#1A6B3C!important}
   .stats-grid{grid-template-columns:repeat(3,1fr)!important}
@@ -349,9 +350,244 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
   @page{margin:20mm 15mm;size:A4}
   @page:first{margin-top:15mm}
 }
+
+/* ── AUTH OVERLAYS ── */
+.auth-overlay{position:fixed;inset:0;z-index:9000;background:var(--bg);display:none;align-items:center;justify-content:center;padding:20px}
+.auth-overlay.visible{display:flex}
+.auth-card{background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:40px 36px;width:100%;max-width:440px;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,0.5)}
+.auth-logo-icon{width:64px;height:64px;background:linear-gradient(135deg,var(--brand),var(--brand-light));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 16px}
+.auth-brand{font-size:26px;font-weight:800;color:var(--text);margin-bottom:4px}
+.auth-sub{font-size:13px;color:var(--text3);margin-bottom:28px}
+.auth-back{background:none;border:none;color:var(--text3);cursor:pointer;font-size:12px;margin-bottom:16px;display:inline-flex;align-items:center;gap:4px;transition:color 0.15s}
+.auth-back:hover{color:var(--text)}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px}
+.role-btn{background:var(--bg3);border:2px solid var(--border2);border-radius:12px;padding:22px 16px;cursor:pointer;transition:all 0.15s;text-align:center;user-select:none}
+.role-btn:hover{border-color:var(--brand);background:var(--brand-glow)}
+.role-btn .rb-icon{font-size:34px;margin-bottom:8px}
+.role-btn .rb-name{font-size:14px;font-weight:700;color:var(--text)}
+.role-btn .rb-desc{font-size:11px;color:var(--text3);margin-top:3px}
+.pin-display{display:flex;justify-content:center;gap:14px;margin:18px 0 22px}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--border2);background:transparent;transition:all 0.15s}
+.pin-dot.filled{background:var(--brand);border-color:var(--brand)}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:250px;margin:0 auto}
+.pk{background:var(--bg4);border:1px solid var(--border2);border-radius:10px;padding:15px;font-size:20px;font-weight:700;color:var(--text);cursor:pointer;transition:all 0.15s;text-align:center;user-select:none;line-height:1}
+.pk:hover{background:var(--brand);border-color:var(--brand);color:#fff}
+.pk:active{transform:scale(0.92)}
+.pk.pk-del{font-size:14px;color:var(--text3)}
+.pk.pk-ok{background:var(--accent);border-color:var(--accent);color:#fff;font-size:14px}
+.pk.pk-ok:hover{background:var(--accent-light)}
+.lic-demo{background:var(--bg3);border-radius:10px;padding:14px;margin-top:16px;text-align:left;font-size:12px;color:var(--text3)}
+.lic-demo strong{color:var(--text2);display:block;margin-bottom:6px}
+.lic-demo code{background:var(--bg4);padding:2px 7px;border-radius:4px;color:var(--accent-light);font-family:monospace;font-size:11px;cursor:pointer;user-select:all}
+.lic-status-bar{background:var(--brand-glow);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px}
+.lic-status-bar .li-icon{font-size:32px}
+.lic-status-bar .li-tier{font-size:17px;font-weight:800;color:var(--brand-light)}
+.lic-status-bar .li-detail{font-size:12px;color:var(--text3);margin-top:2px}
+
+/* ── TENANT PORTAL ── */
+.t-portal{display:flex;flex-direction:column;height:100vh}
+.t-header{background:var(--bg2);border-bottom:1px solid var(--border2);padding:0 24px;height:58px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.t-header-left .t-name{font-size:15px;font-weight:700;color:var(--text)}
+.t-header-left .t-prop{font-size:12px;color:var(--text3)}
+.t-nav{display:flex;gap:2px;background:var(--bg3);padding:3px;border-radius:8px}
+.t-tab{padding:7px 16px;border-radius:6px;font-size:13px;font-weight:500;color:var(--text3);cursor:pointer;border:none;background:none;transition:all 0.15s}
+.t-tab.active{background:var(--brand);color:#fff}
+.t-tab:hover:not(.active){color:var(--text);background:var(--bg4)}
+.t-body{flex:1;overflow-y:auto;padding:24px}
+.t-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 22px;margin-bottom:16px}
+.t-card h3{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border2)}
+.t-lease-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.t-lease-item .label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.t-lease-item .value{font-size:14px;font-weight:600;color:var(--text)}
+.pay-methods{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
+.pm-btn{background:var(--bg4);border:2px solid var(--border2);border-radius:10px;padding:14px;cursor:pointer;transition:all 0.15s;text-align:center;user-select:none}
+.pm-btn:hover{border-color:var(--brand)}
+.pm-btn.active{border-color:var(--brand);background:var(--brand-glow)}
+.pm-btn .pm-ico{font-size:24px;margin-bottom:4px}
+.pm-btn .pm-name{font-size:12px;font-weight:600;color:var(--text)}
+.t-maint-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border2)}
+.t-maint-item:last-child{border-bottom:none}
+.notice-item{padding:14px;background:var(--bg3);border-radius:8px;margin-bottom:10px}
+.notice-item .n-title{font-size:13px;font-weight:600;color:var(--text)}
+.notice-item .n-date{font-size:11px;color:var(--text3);margin-top:2px}
+.notice-item .n-body{font-size:12px;color:var(--text2);margin-top:6px;line-height:1.6}
+
+/* ── HELP CENTRE ── */
+.help-accordion{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:12px}
+.help-q{padding:16px 20px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;font-size:13px;font-weight:600;color:var(--text)}
+.help-q:hover{background:var(--bg4)}
+.help-a{padding:0 20px;max-height:0;overflow:hidden;transition:max-height 0.2s ease,padding 0.2s ease;font-size:13px;color:var(--text2);line-height:1.7}
+.help-a.open{max-height:400px;padding:0 20px 16px}
+.shortcuts-table{width:100%;border-collapse:collapse;font-size:12px}
+.shortcuts-table td{padding:8px 12px;border-bottom:1px solid var(--border2)}
+.shortcuts-table tr:last-child td{border-bottom:none}
+.shortcuts-table .kbd{font-family:monospace;background:var(--bg4);border:1px solid var(--border2);padding:2px 7px;border-radius:4px;color:var(--brand-light);font-size:11px}
+
+/* ── SETTINGS ── */
+.settings-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 22px;margin-bottom:16px}
+.settings-section h3{font-size:14px;font-weight:700;color:var(--text);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border2)}
+.s-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border2)}
+.s-row:last-child{border-bottom:none}
+.s-row-label{font-size:13px;font-weight:600;color:var(--text)}
+.s-row-desc{font-size:11px;color:var(--text3);margin-top:2px}
+.settings-wrap{max-width:720px}
+.settings-section-title{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.9px;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border2)}
+.settings-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid var(--border2)}
+.settings-row:last-child{border-bottom:none}
+.settings-label{font-size:13px;font-weight:600;color:var(--text)}
+.settings-desc{font-size:11px;color:var(--text3);margin-top:2px}
+
+/* ── HELP ── */
+.help-wrap{max-width:720px}
+.help-search-bar{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:12px 16px;margin-bottom:20px}
+.help-cat{margin-bottom:22px}
+.help-cat-title{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.9px;margin-bottom:8px;padding-left:2px}
+.help-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:6px;overflow:hidden}
+.help-item .help-q{padding:13px 16px;cursor:pointer;font-size:13px;font-weight:600;color:var(--text);display:flex;justify-content:space-between;align-items:center;user-select:none}
+.help-item .help-q:hover{background:var(--bg4)}
+.help-item .help-a{max-height:0;overflow:hidden;transition:max-height 0.25s ease,padding 0.25s ease;font-size:13px;color:var(--text2);line-height:1.75;padding:0 16px}
+.help-item.open .help-a{max-height:300px;padding:0 16px 14px}
 </style>
 </head>
 <body>
+
+<!-- ══════════ LICENCE SCREEN ══════════ -->
+<div class="auth-overlay" id="overlay-licence">
+  <div class="auth-card">
+    <div class="auth-logo-icon">🔑</div>
+    <div class="auth-brand">Orbit Homes</div>
+    <div class="auth-sub">Enter your licence key to activate the app</div>
+    <div class="form-group" style="text-align:left;margin-bottom:16px">
+      <label>Licence Key</label>
+      <input type="text" id="lic-input" placeholder="OH-PRO-XXXXXX" style="text-transform:uppercase;letter-spacing:1px;text-align:center;font-family:monospace" oninput="this.value=this.value.toUpperCase()">
+    </div>
+    <button class="btn btn-primary" style="width:100%;padding:11px" onclick="activateLicence()">Activate</button>
+    <div class="lic-demo">
+      <strong>Demo Licence Keys (click to copy):</strong>
+      <code onclick="document.getElementById('lic-input').value='OH-STARTER-DEMO'">OH-STARTER-DEMO</code> — Starter (10 properties)<br style="margin:4px 0">
+      <code onclick="document.getElementById('lic-input').value='OH-PRO-DEMO'">OH-PRO-DEMO</code> — Pro (50 properties)<br style="margin:4px 0">
+      <code onclick="document.getElementById('lic-input').value='OH-AGENCY-DEMO'">OH-AGENCY-DEMO</code> — Agency (unlimited)
+    </div>
+    <div id="lic-error" style="color:var(--red);font-size:12px;margin-top:10px;display:none"></div>
+  </div>
+</div>
+
+<!-- ══════════ FIRST-RUN SETUP ══════════ -->
+<div class="auth-overlay" id="overlay-setup">
+  <div class="auth-card">
+    <div class="auth-logo-icon">🏠</div>
+    <div class="auth-brand">Welcome to Orbit Homes</div>
+    <div class="auth-sub">Create a 4-digit admin PIN to secure your account</div>
+    <div class="pin-display" id="setup-dots">
+      <div class="pin-dot" id="sd0"></div><div class="pin-dot" id="sd1"></div>
+      <div class="pin-dot" id="sd2"></div><div class="pin-dot" id="sd3"></div>
+    </div>
+    <div id="setup-step-label" style="font-size:12px;color:var(--text3);margin-bottom:14px">Enter new PIN</div>
+    <div class="pin-pad">
+      <div class="pk" onclick="setupPinKey('1')">1</div><div class="pk" onclick="setupPinKey('2')">2</div><div class="pk" onclick="setupPinKey('3')">3</div>
+      <div class="pk" onclick="setupPinKey('4')">4</div><div class="pk" onclick="setupPinKey('5')">5</div><div class="pk" onclick="setupPinKey('6')">6</div>
+      <div class="pk" onclick="setupPinKey('7')">7</div><div class="pk" onclick="setupPinKey('8')">8</div><div class="pk" onclick="setupPinKey('9')">9</div>
+      <div class="pk pk-del" onclick="setupPinKey('DEL')">⌫</div><div class="pk" onclick="setupPinKey('0')">0</div><div class="pk pk-ok" onclick="setupPinKey('OK')">✓</div>
+    </div>
+    <div id="setup-error" style="color:var(--red);font-size:12px;margin-top:12px;display:none"></div>
+  </div>
+</div>
+
+<!-- ══════════ LOGIN SCREEN ══════════ -->
+<div class="auth-overlay" id="overlay-login">
+  <div class="auth-card" id="login-card">
+    <!-- Step 1: role selection -->
+    <div id="login-step-role">
+      <div class="auth-logo-icon">🏠</div>
+      <div class="auth-brand">Orbit Homes</div>
+      <div class="auth-sub">Who are you logging in as?</div>
+      <div class="role-grid">
+        <div class="role-btn" onclick="selectLoginRole('admin')">
+          <div class="rb-icon">👔</div>
+          <div class="rb-name">Admin / Manager</div>
+          <div class="rb-desc">Full property management access</div>
+        </div>
+        <div class="role-btn" onclick="selectLoginRole('tenant')">
+          <div class="rb-icon">🏡</div>
+          <div class="rb-name">Tenant Login</div>
+          <div class="rb-desc">View your lease & pay rent</div>
+        </div>
+      </div>
+    </div>
+    <!-- Step 2a: admin PIN -->
+    <div id="login-step-admin" style="display:none">
+      <button class="auth-back" onclick="loginBack()">← Back</button>
+      <div class="auth-logo-icon" style="background:linear-gradient(135deg,var(--brand),var(--brand-light))">👔</div>
+      <div class="auth-brand">Admin Login</div>
+      <div class="auth-sub">Enter your 4-digit PIN</div>
+      <div class="pin-display">
+        <div class="pin-dot" id="apd0"></div><div class="pin-dot" id="apd1"></div>
+        <div class="pin-dot" id="apd2"></div><div class="pin-dot" id="apd3"></div>
+      </div>
+      <div class="pin-pad">
+        <div class="pk" onclick="adminPinKey('1')">1</div><div class="pk" onclick="adminPinKey('2')">2</div><div class="pk" onclick="adminPinKey('3')">3</div>
+        <div class="pk" onclick="adminPinKey('4')">4</div><div class="pk" onclick="adminPinKey('5')">5</div><div class="pk" onclick="adminPinKey('6')">6</div>
+        <div class="pk" onclick="adminPinKey('7')">7</div><div class="pk" onclick="adminPinKey('8')">8</div><div class="pk" onclick="adminPinKey('9')">9</div>
+        <div class="pk pk-del" onclick="adminPinKey('DEL')">⌫</div><div class="pk" onclick="adminPinKey('0')">0</div><div class="pk pk-ok" onclick="adminPinKey('OK')">✓</div>
+      </div>
+      <div id="admin-pin-error" style="color:var(--red);font-size:12px;margin-top:12px;display:none"></div>
+      <button class="auth-back" style="margin-top:16px;color:var(--red)" onclick="forgotAdminPin()">Forgot PIN?</button>
+    </div>
+    <!-- Step 2b: tenant phone -->
+    <div id="login-step-tenant" style="display:none">
+      <button class="auth-back" onclick="loginBack()">← Back</button>
+      <div class="auth-logo-icon" style="background:linear-gradient(135deg,var(--accent),var(--accent-light))">🏡</div>
+      <div class="auth-brand">Tenant Login</div>
+      <div class="auth-sub">Enter your registered phone number</div>
+      <div class="form-group" style="text-align:left;margin-bottom:14px">
+        <label>Phone Number</label>
+        <input type="tel" id="tenant-login-phone" placeholder="+254 712 345 678">
+      </div>
+      <button class="btn btn-accent" style="width:100%;padding:11px;margin-bottom:8px" onclick="tenantPhoneNext()">Continue →</button>
+      <div id="tenant-phone-error" style="color:var(--red);font-size:12px;margin-top:4px;display:none"></div>
+    </div>
+    <!-- Step 2c: tenant PIN -->
+    <div id="login-step-tenant-pin" style="display:none">
+      <button class="auth-back" onclick="showLoginStep('tenant')">← Back</button>
+      <div class="auth-logo-icon" style="background:linear-gradient(135deg,var(--accent),var(--accent-light))">🔒</div>
+      <div class="auth-brand">Enter PIN</div>
+      <div class="auth-sub" id="tenant-pin-sub">4-digit portal PIN</div>
+      <div class="pin-display">
+        <div class="pin-dot" id="tpd0"></div><div class="pin-dot" id="tpd1"></div>
+        <div class="pin-dot" id="tpd2"></div><div class="pin-dot" id="tpd3"></div>
+      </div>
+      <div class="pin-pad">
+        <div class="pk" onclick="tenantPinKey('1')">1</div><div class="pk" onclick="tenantPinKey('2')">2</div><div class="pk" onclick="tenantPinKey('3')">3</div>
+        <div class="pk" onclick="tenantPinKey('4')">4</div><div class="pk" onclick="tenantPinKey('5')">5</div><div class="pk" onclick="tenantPinKey('6')">6</div>
+        <div class="pk" onclick="tenantPinKey('7')">7</div><div class="pk" onclick="tenantPinKey('8')">8</div><div class="pk" onclick="tenantPinKey('9')">9</div>
+        <div class="pk pk-del" onclick="tenantPinKey('DEL')">⌫</div><div class="pk" onclick="tenantPinKey('0')">0</div><div class="pk pk-ok" onclick="tenantPinKey('OK')">✓</div>
+      </div>
+      <div id="tenant-pin-error" style="color:var(--red);font-size:12px;margin-top:12px;display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TENANT PORTAL ══════════ -->
+<div class="auth-overlay" id="overlay-tenant">
+  <div class="t-portal" style="width:100%;max-width:860px;border-radius:16px;overflow:hidden;border:1px solid var(--border);box-shadow:0 24px 80px rgba(0,0,0,0.5)">
+    <div class="t-header">
+      <div class="t-header-left">
+        <div class="t-name" id="t-portal-name">Tenant</div>
+        <div class="t-prop" id="t-portal-prop"></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="t-nav" id="t-nav">
+          <button class="t-tab active" onclick="switchTenantTab('lease',this)">🏠 Lease</button>
+          <button class="t-tab" onclick="switchTenantTab('payments',this)">💰 Payments</button>
+          <button class="t-tab" onclick="switchTenantTab('maintenance',this)">🔧 Maintenance</button>
+          <button class="t-tab" onclick="switchTenantTab('notices',this)">📢 Notices</button>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="tenantLogout()">Logout</button>
+      </div>
+    </div>
+    <div class="t-body" id="t-body"></div>
+  </div>
+</div>
 
 <!-- Floating tooltip for collapsed sidebar -->
 <div id="nav-tooltip"></div>
@@ -361,8 +597,9 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
   <div class="pb-logo">
     <div class="pb-icon">🏠</div>
     <div>
-      <div class="pb-name">Orbit Homes</div>
-      <div class="pb-tagline">Property Management System</div>
+      <div class="pb-name" id="pb-name">Orbit Homes</div>
+      <div class="pb-tagline" id="pb-tagline">Property Management System</div>
+      <div class="pb-address" id="pb-address"></div>
     </div>
   </div>
   <div class="pb-meta">
@@ -414,6 +651,15 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
       <div class="nav-label">Reports</div>
       <div class="nav-item" data-view="reports" data-label="Reports">
         <span class="nav-icon">📄</span><span class="nav-text">Reports</span>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">System</div>
+      <div class="nav-item" data-view="help" data-label="Help Centre">
+        <span class="nav-icon">❓</span><span class="nav-text">Help Centre</span>
+      </div>
+      <div class="nav-item" data-view="settings" data-label="Settings">
+        <span class="nav-icon">⚙️</span><span class="nav-text">Settings</span>
       </div>
     </div>
   </nav>
@@ -557,6 +803,83 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
       <div id="report-content"></div>
     </div>
 
+    <!-- HELP CENTRE -->
+    <div class="view" id="view-help">
+      <div class="help-wrap">
+        <div class="help-search-bar">
+          <span>🔍</span>
+          <input type="text" id="help-search" placeholder="Search help topics…" oninput="filterHelp(this.value)" style="background:none;border:none;outline:none;flex:1;color:var(--text);font-size:15px">
+        </div>
+        <div id="help-list"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="view" id="view-settings">
+      <div class="settings-wrap">
+        <div class="settings-section">
+          <div class="settings-section-title">Report Branding</div>
+          <div class="settings-row">
+            <div><div class="settings-label">Company / Landlord Name</div><div class="settings-desc">Shown as the company name on printed reports</div></div>
+            <input type="text" id="brand-name" placeholder="Your Name or Company" style="width:200px;padding:7px 10px;border-radius:7px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:13px">
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-label">Address</div><div class="settings-desc">Address line on printed reports</div></div>
+            <input type="text" id="brand-address" placeholder="123 Main St, City" style="width:200px;padding:7px 10px;border-radius:7px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:13px">
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-label">Tagline</div><div class="settings-desc">Optional tagline below your name on reports</div></div>
+            <input type="text" id="brand-tagline" placeholder="Property Management" style="width:200px;padding:7px 10px;border-radius:7px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:13px">
+          </div>
+          <div class="settings-row">
+            <div></div>
+            <button class="btn btn-primary" onclick="saveBranding()">Save Branding</button>
+          </div>
+        </div>
+        <div class="settings-section">
+          <div class="settings-section-title">Security &amp; Access</div>
+          <div class="settings-row">
+            <div><div class="settings-label">Admin PIN</div><div class="settings-desc">Change the 4-digit admin login PIN</div></div>
+            <button class="btn btn-secondary" onclick="startChangePin()">Change PIN</button>
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-label">Tenant Credentials</div><div class="settings-desc">Manage tenant phone numbers and PINs</div></div>
+            <button class="btn btn-secondary" onclick="openTenantCredsModal()">Manage</button>
+          </div>
+        </div>
+        <div class="settings-section">
+          <div class="settings-section-title">Appearance</div>
+          <div class="settings-row">
+            <div><div class="settings-label">Theme</div><div class="settings-desc">Toggle between dark and light mode</div></div>
+            <button class="btn btn-secondary" onclick="toggleTheme()" id="settings-theme-btn">Dark Mode</button>
+          </div>
+        </div>
+        <div class="settings-section">
+          <div class="settings-section-title">Licence</div>
+          <div id="settings-licence-info" style="padding:12px 0"></div>
+          <div class="settings-row">
+            <div><div class="settings-label">Activate Licence</div><div class="settings-desc">Enter a licence key to unlock Pro or Agency features</div></div>
+            <button class="btn btn-primary" onclick="showOverlay('overlay-licence')">Enter Key</button>
+          </div>
+        </div>
+        <div class="settings-section">
+          <div class="settings-section-title">Notices to Tenants</div>
+          <div class="settings-row">
+            <div><div class="settings-label">Send Notice</div><div class="settings-desc">Post a message visible to a tenant in their portal</div></div>
+            <button class="btn btn-secondary" onclick="openNoticeModal()">New Notice</button>
+          </div>
+          <div id="notices-list" style="margin-top:12px"></div>
+        </div>
+        <div class="settings-section" style="border-color:var(--red-bg)">
+          <div class="settings-section-title" style="color:var(--red)">Danger Zone</div>
+          <div class="settings-row">
+            <div><div class="settings-label">Clear All Data</div><div class="settings-desc">Permanently delete all properties, tenants and payments</div></div>
+            <button class="btn" style="background:var(--red);color:#fff" onclick="clearAllData()">Clear Data</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /content -->
 </main>
 </div><!-- /app -->
@@ -653,6 +976,68 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
   </div>
 </div>
 
+<!-- Tenant Payment Modal -->
+<div class="modal-overlay" id="modal-tenant-payment">
+  <div class="modal">
+    <div class="modal-header"><h2>Make a Payment</h2><button class="modal-close" onclick="closeModal('modal-tenant-payment')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Amount (KES) *</label><input type="number" id="tp-amount" placeholder="e.g. 25000" min="0"></div>
+      <div class="form-group"><label>Payment Method</label>
+        <div class="pay-methods" style="margin-top:8px">
+          <button class="pm-btn active" id="pm-mtn" onclick="selectPM('mtn')">📱 MTN Mobile Money</button>
+          <button class="pm-btn" id="pm-orange" onclick="selectPM('orange')">🟠 Orange Money</button>
+          <button class="pm-btn" id="pm-card" onclick="selectPM('card')">💳 Card Payment</button>
+          <button class="pm-btn" id="pm-bank" onclick="selectPM('bank')">🏦 Bank Transfer</button>
+        </div>
+      </div>
+      <div class="form-group" id="pm-ref-row"><label>Reference / Receipt No.</label><input type="text" id="tp-ref" placeholder="Transaction reference"></div>
+      <div class="form-group"><label>Payment Date</label><input type="date" id="tp-date"></div>
+      <div id="tp-sim-msg" style="background:var(--accent-bg);border:1px solid var(--accent);border-radius:8px;padding:12px;display:none;margin-top:8px;color:var(--accent-light);font-size:13px"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-tenant-payment')">Cancel</button>
+      <button class="btn btn-primary" onclick="processTenantPayment()">Submit Payment</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Notice Modal -->
+<div class="modal-overlay" id="modal-notice">
+  <div class="modal">
+    <div class="modal-header"><h2>Send Notice to Tenant</h2><button class="modal-close" onclick="closeModal('modal-notice')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Tenant *</label>
+        <select id="notice-tenant-id"><option value="">— Select tenant —</option></select>
+      </div>
+      <div class="form-group"><label>Subject *</label><input type="text" id="notice-subject" placeholder="e.g. Rent reminder, Maintenance notice…"></div>
+      <div class="form-group"><label>Message *</label><textarea id="notice-body" rows="4" placeholder="Type your message here…" style="width:100%;resize:vertical;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);color:var(--text)"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-notice')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveNotice()">Send Notice</button>
+    </div>
+  </div>
+</div>
+
+<!-- Tenant Credentials Modal -->
+<div class="modal-overlay" id="modal-tenant-creds">
+  <div class="modal">
+    <div class="modal-header"><h2>Tenant Portal Access</h2><button class="modal-close" onclick="closeModal('modal-tenant-creds')">✕</button></div>
+    <div class="modal-body">
+      <p style="color:var(--text2);margin-bottom:16px;font-size:13px">Set the phone number and 4-digit PIN each tenant uses to log in to their portal.</p>
+      <div class="form-group"><label>Tenant *</label>
+        <select id="tc-tenant-id" onchange="prefillTenantCreds()"><option value="">— Select tenant —</option></select>
+      </div>
+      <div class="form-group"><label>Phone Number</label><input type="tel" id="tc-phone" placeholder="+254 712 345 678"></div>
+      <div class="form-group"><label>Portal PIN (4 digits)</label><input type="password" id="tc-pin" placeholder="••••" maxlength="4" inputmode="numeric"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-tenant-creds')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveTenantCreds()">Save Access</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast-container" id="toast-container"></div>
 
 <script>
@@ -665,10 +1050,12 @@ const DB = {
 };
 
 let data = {
-  properties: DB.get('properties', []),
-  tenants:    DB.get('tenants', []),
-  payments:   DB.get('payments', []),
-  maintenance:DB.get('maintenance', []),
+  properties:  DB.get('properties', []),
+  tenants:     DB.get('tenants', []),
+  payments:    DB.get('payments', []),
+  maintenance: DB.get('maintenance', []),
+  notices:     DB.get('notices', []),
+  tenantCreds: DB.get('tenantCreds', []),
 };
 
 function save(key) { DB.set(key, data[key]); }
@@ -868,6 +1255,8 @@ const viewMeta = {
   rent:         { title:'Rent Tracking',   sub:'Record & track payments' },
   maintenance:  { title:'Maintenance',     sub:'Track maintenance requests' },
   reports:      { title:'Reports',         sub:'Summaries & print reports' },
+  help:         { title:'Help Centre',     sub:'Guides, FAQs & shortcuts' },
+  settings:     { title:'Settings',        sub:'Security, licence & appearance' },
 };
 
 const viewActions = {
@@ -902,6 +1291,8 @@ function renderCurrentView() {
     case 'rent':          renderRent(); break;
     case 'maintenance':   renderMaintenance(); break;
     case 'reports':       renderReports(); break;
+    case 'help':          renderHelp(); break;
+    case 'settings':      renderSettings(); break;
   }
 }
 
@@ -1353,15 +1744,543 @@ function seedDemoData(){
   save('properties');save('tenants');save('payments');save('maintenance');
 }
 
-// ══════════ INIT ══════════
-seedDemoData();
-rentYear=new Date().getFullYear();
-rentMonth=new Date().getMonth();
-initTheme();
-initSidebar();
-pushHistory();
-updateNotifBadge();
-renderDashboard();
+// ══════════ LICENCE ══════════
+const VALID_KEYS = {
+  'OH-STARTER-2024-DEMO': { tier:'Starter', maxProps:10,  expiry:'2026-12-31' },
+  'OH-PRO-2024-DEMO':     { tier:'Pro',     maxProps:50,  expiry:'2026-12-31' },
+  'OH-AGENCY-2024-DEMO':  { tier:'Agency',  maxProps:999, expiry:'2026-12-31' },
+  'OH-STARTER-TRIAL':     { tier:'Starter', maxProps:10,  expiry:'2026-06-30' },
+};
+
+function getLicence(){ return DB.get('licence', null); }
+function saveLicence(obj){ DB.set('licence', obj); }
+
+function activateLicence(){
+  const key = document.getElementById('lic-key-input').value.trim().toUpperCase();
+  const info = VALID_KEYS[key];
+  if(!info){ showToast('Invalid licence key. Please try again.','error'); return; }
+  if(new Date(info.expiry) < new Date()){ showToast('This licence key has expired.','error'); return; }
+  saveLicence({ key, ...info, activatedAt: today() });
+  document.getElementById('lic-err').textContent='';
+  hideOverlay('overlay-licence');
+  showToast(`Licence activated! ${info.tier} plan — up to ${info.maxProps===999?'unlimited':info.maxProps} properties.`);
+  renderSettingsLicence();
+}
+
+function renderSettingsLicence(){
+  const el = document.getElementById('settings-licence-info');
+  if(!el) return;
+  const lic = getLicence();
+  if(!lic){ el.innerHTML='<span style="color:var(--text3)">No licence activated. App runs in demo mode (3 properties max).</span>'; return; }
+  el.innerHTML=`<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+    <span class="badge" style="background:var(--brand-glow);color:var(--brand-light);padding:4px 12px;border-radius:20px;font-weight:600">${lic.tier}</span>
+    <span style="color:var(--text2)">Key: <code style="color:var(--text)">${lic.key}</code></span>
+    <span style="color:var(--text2)">Expires: ${lic.expiry}</span>
+  </div>`;
+}
+
+function maxPropsAllowed(){
+  const lic = getLicence();
+  return lic ? lic.maxProps : 3;
+}
+
+// ══════════ PIN AUTH ══════════
+function hashPin(pin){
+  let h=0x811c9dc5;
+  for(let i=0;i<pin.length;i++){ h=Math.imul(h^pin.charCodeAt(i),0x01000193); }
+  return (h>>>0).toString(16)+'x'+pin.length;
+}
+
+function showOverlay(id){ document.getElementById(id).classList.add('visible'); }
+function hideOverlay(id){ document.getElementById(id).classList.remove('visible'); }
+
+// PIN pad accumulator state
+let _pinCtx='', _pinBuf='', _pinConfirmBuf='', _pinStep=0;
+const PIN_LEN=4;
+
+function setupPinKey(k){
+  if(k==='⌫'){ _pinBuf=_pinBuf.slice(0,-1); }
+  else if(_pinBuf.length<PIN_LEN){ _pinBuf+=k; }
+  updatePinDots('setup-dots', _pinBuf.length);
+  if(_pinBuf.length===PIN_LEN){
+    if(_pinStep===0){
+      _pinStep=1; _pinConfirmBuf='';
+      document.getElementById('setup-instruction').textContent='Confirm your PIN';
+      clearPinDots('setup-dots');
+      const tmp=_pinBuf; _pinBuf='';
+      _pinConfirmBuf=tmp;
+      // swap: now buffer collects confirm
+      _pinStep=2;
+    } else if(_pinStep===2){
+      if(_pinBuf===_pinConfirmBuf){
+        DB.set('adminPin', hashPin(_pinBuf));
+        hideOverlay('overlay-setup');
+        showOverlay('overlay-login');
+        showLoginStep('login-step-role');
+      } else {
+        showToast('PINs do not match. Try again.','error');
+        _pinBuf=''; _pinConfirmBuf=''; _pinStep=0;
+        document.getElementById('setup-instruction').textContent='Create a 4-digit admin PIN';
+        clearPinDots('setup-dots');
+      }
+    }
+  }
+}
+
+// Confirm step helper — reset confirm buf to new input
+function setupPinKey(k){
+  const stored = DB.get('adminPin',null);
+  if(!stored){
+    // Setup flow: two-step
+    if(_pinStep===0||_pinStep===1){
+      if(k==='⌫'){ _pinBuf=_pinBuf.slice(0,-1); }
+      else if(_pinBuf.length<PIN_LEN){ _pinBuf+=k; }
+      updatePinDots('setup-dots', _pinBuf.length);
+      if(_pinBuf.length===PIN_LEN && _pinStep===0){
+        _pinStep=1; _pinConfirmBuf=_pinBuf; _pinBuf='';
+        document.getElementById('setup-instruction').textContent='Confirm your PIN';
+        clearPinDots('setup-dots');
+      } else if(_pinBuf.length===PIN_LEN && _pinStep===1){
+        if(_pinBuf===_pinConfirmBuf){
+          DB.set('adminPin', hashPin(_pinBuf));
+          _pinBuf=''; _pinStep=0;
+          hideOverlay('overlay-setup');
+          showOverlay('overlay-login');
+          showLoginStep('login-step-role');
+        } else {
+          showToast('PINs do not match. Try again.','error');
+          _pinBuf=''; _pinConfirmBuf=''; _pinStep=0;
+          document.getElementById('setup-instruction').textContent='Create a 4-digit admin PIN';
+          clearPinDots('setup-dots');
+        }
+      }
+    }
+  }
+}
+
+function adminPinKey(k){
+  if(k==='⌫'){ _pinBuf=_pinBuf.slice(0,-1); }
+  else if(_pinBuf.length<PIN_LEN){ _pinBuf+=k; }
+  updatePinDots('admin-dots', _pinBuf.length);
+  if(_pinBuf.length===PIN_LEN){
+    const stored=DB.get('adminPin',null);
+    if(stored && hashPin(_pinBuf)===stored){
+      _pinBuf='';
+      hideOverlay('overlay-login');
+      renderCurrentView();
+    } else {
+      showToast('Incorrect PIN. Try again.','error');
+      _pinBuf=''; clearPinDots('admin-dots');
+    }
+  }
+}
+
+function tenantPinKey(k){
+  if(k==='⌫'){ _pinBuf=_pinBuf.slice(0,-1); }
+  else if(_pinBuf.length<PIN_LEN){ _pinBuf+=k; }
+  updatePinDots('tenant-pin-dots', _pinBuf.length);
+  if(_pinBuf.length===PIN_LEN){
+    const phone=document.getElementById('tenant-phone-input').value.trim().replace(/\s+/g,'');
+    const cred=data.tenantCreds.find(c=>c.phone.replace(/\s+/g,'')===phone && hashPin(_pinBuf)===c.pinHash);
+    if(cred){
+      const tenant=data.tenants.find(t=>t.id===cred.tenantId);
+      if(tenant){ openTenantPortal(tenant); _pinBuf=''; }
+      else { showToast('Tenant record not found.','error'); _pinBuf=''; clearPinDots('tenant-pin-dots'); }
+    } else {
+      showToast('Incorrect phone or PIN.','error');
+      _pinBuf=''; clearPinDots('tenant-pin-dots');
+    }
+  }
+}
+
+function tenantPhoneNext(){
+  const ph=document.getElementById('tenant-phone-input').value.trim();
+  if(!ph){ showToast('Please enter your phone number.','error'); return; }
+  const phone=ph.replace(/\s+/g,'');
+  const cred=data.tenantCreds.find(c=>c.phone.replace(/\s+/g,'')===phone);
+  if(!cred){ showToast('No portal access found for this number.','error'); return; }
+  _pinBuf=''; clearPinDots('tenant-pin-dots');
+  showLoginStep('login-step-tenant-pin');
+}
+
+function selectLoginRole(role){
+  if(role==='admin') showLoginStep('login-step-admin');
+  else showLoginStep('login-step-tenant');
+}
+
+function showLoginStep(step){
+  ['login-step-role','login-step-admin','login-step-tenant','login-step-tenant-pin'].forEach(id=>{
+    document.getElementById(id).style.display = id===step ? 'block' : 'none';
+  });
+  _pinBuf='';
+  clearPinDots('admin-dots');
+}
+
+function loginBack(){
+  showLoginStep('login-step-role');
+}
+
+function forgotAdminPin(){
+  if(confirm('Reset admin PIN? You will be asked to set a new PIN.')){
+    DB.set('adminPin',null);
+    hideOverlay('overlay-login');
+    showOverlay('overlay-setup');
+    _pinBuf=''; _pinStep=0;
+    document.getElementById('setup-instruction').textContent='Create a 4-digit admin PIN';
+    clearPinDots('setup-dots');
+  }
+}
+
+function startChangePin(){
+  DB.set('adminPin',null);
+  showOverlay('overlay-setup');
+  _pinBuf=''; _pinStep=0;
+  document.getElementById('setup-instruction').textContent='Create a new 4-digit admin PIN';
+  clearPinDots('setup-dots');
+}
+
+function updatePinDots(id, n){
+  const dots=document.querySelectorAll(`#${id} .pin-dot`);
+  dots.forEach((d,i)=>d.classList.toggle('filled', i<n));
+}
+
+function clearPinDots(id){
+  document.querySelectorAll(`#${id} .pin-dot`).forEach(d=>d.classList.remove('filled'));
+}
+
+// ══════════ TENANT PORTAL ══════════
+let currentTenantUser = null;
+let _selectedPM = 'mtn';
+
+function openTenantPortal(tenant){
+  currentTenantUser = tenant;
+  hideOverlay('overlay-login');
+  document.getElementById('t-portal-name').textContent = tenant.name;
+  const prop = data.properties.find(p=>p.id===tenant.propertyId);
+  document.getElementById('t-portal-prop').textContent = prop ? `${prop.name} · Unit ${tenant.unit}` : `Unit ${tenant.unit}`;
+  showOverlay('overlay-tenant');
+  switchTenantTab('lease');
+}
+
+function tenantLogout(){
+  currentTenantUser = null;
+  hideOverlay('overlay-tenant');
+  showOverlay('overlay-login');
+  showLoginStep('login-step-role');
+}
+
+function switchTenantTab(tab){
+  document.querySelectorAll('.t-tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===tab));
+  const body = document.getElementById('t-body');
+  if(tab==='lease') body.innerHTML = renderTenantLease();
+  else if(tab==='payments') body.innerHTML = renderTenantPayments();
+  else if(tab==='maintenance') body.innerHTML = renderTenantMaintenance();
+  else if(tab==='notices') body.innerHTML = renderTenantNotices();
+}
+
+function renderTenantLease(){
+  const t = currentTenantUser;
+  if(!t) return '';
+  const prop = data.properties.find(p=>p.id===t.propertyId) || {};
+  const now = new Date(); const end = new Date(t.leaseEnd);
+  const daysLeft = Math.ceil((end-now)/(1000*60*60*24));
+  return `<div style="display:grid;gap:12px;padding:4px 0">
+    <div class="t-card"><div style="color:var(--text3);font-size:12px;margin-bottom:4px">Property</div><div style="font-weight:600">${prop.name||'—'}</div></div>
+    <div class="t-card"><div style="color:var(--text3);font-size:12px;margin-bottom:4px">Unit</div><div style="font-weight:600">${t.unit}</div></div>
+    <div class="t-card"><div style="color:var(--text3);font-size:12px;margin-bottom:4px">Monthly Rent</div><div style="font-weight:600;color:var(--accent-light)">KES ${fmt(t.monthlyRent)}</div></div>
+    <div class="t-card"><div style="color:var(--text3);font-size:12px;margin-bottom:4px">Lease Period</div><div style="font-weight:600">${t.leaseStart} → ${t.leaseEnd}</div></div>
+    <div class="t-card"><div style="color:var(--text3);font-size:12px;margin-bottom:4px">Days Remaining</div><div style="font-weight:600;color:${daysLeft<30?'var(--red)':'var(--text)'}">${daysLeft} days</div></div>
+  </div>`;
+}
+
+function renderTenantPayments(){
+  const t = currentTenantUser;
+  if(!t) return '';
+  const pmts = data.payments.filter(p=>p.tenantId===t.id).sort((a,b)=>b.date.localeCompare(a.date));
+  const mk = monthKey(new Date().getFullYear(), new Date().getMonth());
+  const paid = pmts.find(p=>p.month===mk);
+  let html = `<div style="margin-bottom:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div><span style="font-weight:600">This Month</span> — ${paid?'<span style="color:var(--accent-light)">✅ Paid</span>':'<span style="color:var(--red)">⚠️ Outstanding</span>'}</div>
+      <button class="btn btn-primary btn-sm" onclick="openTenantPaymentModal()">Pay Now</button>
+    </div>
+  </div>
+  <div style="display:grid;gap:8px">`;
+  if(pmts.length===0){ html+='<div style="color:var(--text3);text-align:center;padding:24px">No payment history yet.</div>'; }
+  pmts.forEach(p=>{
+    html+=`<div class="t-card" style="display:flex;justify-content:space-between">
+      <div><div style="font-weight:600">KES ${fmt(p.amount)}</div><div style="color:var(--text3);font-size:12px">${p.month} · ${p.method} ${p.ref?'· '+p.ref:''}</div></div>
+      <div style="color:var(--text3);font-size:12px">${p.date}</div>
+    </div>`;
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderTenantMaintenance(){
+  const t = currentTenantUser;
+  if(!t) return '';
+  const issues = data.maintenance.filter(m=>m.propertyId===t.propertyId && m.unit===t.unit);
+  let html = '<div style="display:grid;gap:8px">';
+  if(issues.length===0){ html+='<div style="color:var(--text3);text-align:center;padding:24px">No maintenance requests for your unit.</div>'; }
+  const sc={open:'var(--red)',in-progress':'var(--yellow)','resolved':'var(--green)'};
+  issues.forEach(m=>{
+    const col=m.status==='open'?'var(--red)':m.status==='in-progress'?'var(--yellow)':'var(--green)';
+    html+=`<div class="t-card"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-weight:600">${m.title}</span><span style="color:${col};font-size:12px;text-transform:capitalize">${m.status}</span></div><div style="color:var(--text3);font-size:13px">${m.description}</div></div>`;
+  });
+  return html+'</div>';
+}
+
+function renderTenantNotices(){
+  const t = currentTenantUser;
+  if(!t) return '';
+  const notices = data.notices.filter(n=>n.tenantId===t.id).sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
+  let html = '<div style="display:grid;gap:8px">';
+  if(notices.length===0){ html+='<div style="color:var(--text3);text-align:center;padding:24px">No notices from your landlord.</div>'; }
+  notices.forEach(n=>{
+    html+=`<div class="t-card"><div style="font-weight:600;margin-bottom:4px">${n.subject}</div><div style="color:var(--text2);font-size:13px;margin-bottom:8px">${n.body}</div><div style="color:var(--text3);font-size:12px">${n.createdAt}</div></div>`;
+  });
+  return html+'</div>';
+}
+
+function openTenantPaymentModal(){
+  _selectedPM='mtn';
+  document.querySelectorAll('.pm-btn').forEach(b=>b.classList.remove('active'));
+  const firstBtn=document.getElementById('pm-mtn');
+  if(firstBtn) firstBtn.classList.add('active');
+  document.getElementById('tp-amount').value = currentTenantUser ? currentTenantUser.monthlyRent : '';
+  document.getElementById('tp-ref').value = '';
+  document.getElementById('tp-date').value = today();
+  document.getElementById('tp-sim-msg').style.display='none';
+  openModal('modal-tenant-payment');
+}
+
+function selectPM(pm){
+  _selectedPM=pm;
+  ['mtn','orange','card','bank'].forEach(id=>{
+    const btn=document.getElementById('pm-'+id);
+    if(btn) btn.classList.toggle('active',id===pm);
+  });
+  const msgs={
+    mtn:'Dial *165# on your MTN line, select Pay Bill, enter reference from above, and confirm with your PIN.',
+    orange:'Dial *144# on your Orange line, select Mobile Money → Pay, and follow the prompts.',
+    card:'Enter your card details securely via the card terminal or online portal provided by your landlord.',
+    bank:'Transfer to: Bank: Equity Bank · Account: 0123456789 · Name: Orbit Homes · Ref: Your Unit Number'
+  };
+  const sim=document.getElementById('tp-sim-msg');
+  if(sim){ sim.style.display='block'; sim.textContent=msgs[pm]||''; }
+}
+
+function processTenantPayment(){
+  const amount=parseFloat(document.getElementById('tp-amount').value);
+  const ref=document.getElementById('tp-ref').value.trim();
+  const date=document.getElementById('tp-date').value||today();
+  if(!amount||amount<=0){ showToast('Enter a valid amount.','error'); return; }
+  const t=currentTenantUser;
+  if(!t) return;
+  const mk=monthKey(new Date().getFullYear(),new Date().getMonth());
+  const pmt={id:uid(),tenantId:t.id,month:mk,amount,date,method:_selectedPM,ref,createdAt:today()};
+  pushHistory();
+  data.payments.push(pmt);
+  save('payments');
+  closeModal('modal-tenant-payment');
+  showToast('Payment recorded successfully!');
+  switchTenantTab('payments');
+}
+
+// ══════════ NOTICES (ADMIN) ══════════
+function openNoticeModal(){
+  const sel=document.getElementById('notice-tenant-id');
+  sel.innerHTML='<option value="">— Select tenant —</option>';
+  data.tenants.forEach(t=>{ sel.innerHTML+=`<option value="${t.id}">${t.name}</option>`; });
+  document.getElementById('notice-subject').value='';
+  document.getElementById('notice-body').value='';
+  openModal('modal-notice');
+}
+
+function saveNotice(){
+  const tenantId=document.getElementById('notice-tenant-id').value;
+  const subject=document.getElementById('notice-subject').value.trim();
+  const body=document.getElementById('notice-body').value.trim();
+  if(!tenantId||!subject||!body){ showToast('Fill in all fields.','error'); return; }
+  data.notices.push({id:uid(),tenantId,subject,body,createdAt:today()});
+  save('notices');
+  closeModal('modal-notice');
+  showToast('Notice sent to tenant.');
+  renderNoticesList();
+}
+
+function renderNoticesList(){
+  const el=document.getElementById('notices-list');
+  if(!el) return;
+  if(data.notices.length===0){ el.innerHTML='<div style="color:var(--text3);font-size:13px">No notices sent yet.</div>'; return; }
+  el.innerHTML=data.notices.slice().reverse().map(n=>{
+    const t=data.tenants.find(x=>x.id===n.tenantId)||{name:'Unknown'};
+    return `<div style="background:var(--card);border:1px solid var(--border2);border-radius:8px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:start;gap:12px">
+      <div><div style="font-weight:600;font-size:13px">${n.subject}</div><div style="color:var(--text3);font-size:12px">${t.name} · ${n.createdAt}</div></div>
+      <button class="btn btn-secondary btn-sm" onclick="deleteNotice('${n.id}')">✕</button>
+    </div>`;
+  }).join('');
+}
+
+function deleteNotice(id){
+  data.notices=data.notices.filter(n=>n.id!==id);
+  save('notices');
+  renderNoticesList();
+}
+
+// ══════════ TENANT CREDS (ADMIN) ══════════
+function openTenantCredsModal(){
+  const sel=document.getElementById('tc-tenant-id');
+  sel.innerHTML='<option value="">— Select tenant —</option>';
+  data.tenants.forEach(t=>{ sel.innerHTML+=`<option value="${t.id}">${t.name}</option>`; });
+  document.getElementById('tc-phone').value='';
+  document.getElementById('tc-pin').value='';
+  openModal('modal-tenant-creds');
+}
+
+function prefillTenantCreds(){
+  const tid=document.getElementById('tc-tenant-id').value;
+  const cred=data.tenantCreds.find(c=>c.tenantId===tid);
+  document.getElementById('tc-phone').value=cred?cred.phone:'';
+  document.getElementById('tc-pin').value='';
+}
+
+function saveTenantCreds(){
+  const tenantId=document.getElementById('tc-tenant-id').value;
+  const phone=document.getElementById('tc-phone').value.trim();
+  const pin=document.getElementById('tc-pin').value.trim();
+  if(!tenantId||!phone||pin.length!==4||!/^\d{4}$/.test(pin)){ showToast('Select a tenant, enter phone and a 4-digit PIN.','error'); return; }
+  const existing=data.tenantCreds.findIndex(c=>c.tenantId===tenantId);
+  const rec={tenantId,phone,pinHash:hashPin(pin)};
+  if(existing>=0) data.tenantCreds[existing]=rec;
+  else data.tenantCreds.push(rec);
+  save('tenantCreds');
+  closeModal('modal-tenant-creds');
+  showToast('Portal access saved for tenant.');
+}
+
+// ══════════ HELP CENTRE ══════════
+const HELP_TOPICS = [
+  { cat:'Getting Started', icon:'🚀', q:'How do I add my first property?', a:'Click Properties in the sidebar → Add Property button. Fill in the name, address, type, number of units and monthly rent, then save.' },
+  { cat:'Getting Started', icon:'🚀', q:'How do I add a tenant?', a:'Go to Tenants → Add Tenant. Link the tenant to an existing property, set the unit, lease dates and monthly rent.' },
+  { cat:'Getting Started', icon:'🚀', q:'How do I record a rent payment?', a:'Go to Rent Tracking, select the month and year, then click Record Payment next to any tenant showing an outstanding balance.' },
+  { cat:'Tenant Portal', icon:'👤', q:'How does the Tenant Portal work?', a:'Tenants log in using their phone number and a 4-digit PIN. You set their credentials from Settings → Tenant Credentials. Once logged in, they can view their lease, payment history, maintenance requests and notices.' },
+  { cat:'Tenant Portal', icon:'👤', q:'How do I give a tenant portal access?', a:'Go to Settings → Tenant Credentials. Select the tenant, enter their phone number and set a 4-digit PIN, then save.' },
+  { cat:'Tenant Portal', icon:'👤', q:'How do I send a notice to a tenant?', a:'Go to Settings → Send Notice. Select the tenant, type a subject and message, then send. The notice will appear in their portal.' },
+  { cat:'Payments', icon:'💳', q:'What payment methods are supported?', a:'MTN Mobile Money, Orange Money, Card Payment and Bank Transfer. These are recorded manually — the app tracks them for your records.' },
+  { cat:'Payments', icon:'💳', q:'Can tenants pay from the portal?', a:'Yes. Tenants click Pay Now in their portal, enter the amount, select a payment method, and submit. The record is saved to their history.' },
+  { cat:'Maintenance', icon:'🔧', q:'How do I log a maintenance request?', a:'Go to Maintenance → Log Issue. Select the property and unit, describe the problem, set a priority and assign it to a contractor if needed.' },
+  { cat:'Security', icon:'🔒', q:'How do I set up an admin PIN?', a:'On first launch you will be prompted to create a 4-digit PIN. You can change it later from Settings → Admin PIN.' },
+  { cat:'Security', icon:'🔒', q:'I forgot my admin PIN. What do I do?', a:'On the admin login screen, click Forgot PIN. You will be prompted to set a new PIN. All data is preserved.' },
+  { cat:'Licence', icon:'🔑', q:'What are the licence tiers?', a:'Starter (up to 10 properties), Pro (up to 50 properties), Agency (unlimited). Without a licence the app allows up to 3 properties in demo mode.' },
+  { cat:'Licence', icon:'🔑', q:'How do I activate a licence?', a:'Go to Settings → Activate Licence. Enter your licence key and click Activate. Demo keys: OH-STARTER-2024-DEMO, OH-PRO-2024-DEMO, OH-AGENCY-2024-DEMO.' },
+  { cat:'Data & Privacy', icon:'🗄️', q:'Where is my data stored?', a:'All data is stored locally on this device using your browser\'s localStorage. Nothing is sent to any server. Clearing your browser data or app storage will erase it.' },
+  { cat:'Data & Privacy', icon:'🗄️', q:'How do I back up my data?', a:'Currently backup is manual — you can export reports from the Reports view. A full data export feature is planned for a future update.' },
+  { cat:'Shortcuts', icon:'⌨️', q:'What keyboard shortcuts are available?', a:'Ctrl+Z — Undo · Ctrl+Y — Redo · Ctrl+P — Print report · F11 — Full screen · Ctrl+= — Zoom in · Ctrl+- — Zoom out' },
+];
+
+function renderHelp(){
+  filterHelp('');
+}
+
+function filterHelp(query){
+  const q=(query||'').toLowerCase();
+  const el=document.getElementById('help-list');
+  if(!el) return;
+  const filtered=q ? HELP_TOPICS.filter(t=>t.q.toLowerCase().includes(q)||t.a.toLowerCase().includes(q)||t.cat.toLowerCase().includes(q)) : HELP_TOPICS;
+  const cats=[...new Set(filtered.map(t=>t.cat))];
+  el.innerHTML = cats.map(cat=>{
+    const items=filtered.filter(t=>t.cat===cat);
+    return `<div class="help-cat">
+      <div class="help-cat-title">${items[0].icon} ${cat}</div>
+      ${items.map((t,i)=>`<div class="help-item">
+        <div class="help-q" onclick="toggleHelpAnswer(this)">${t.q} <span style="float:right;color:var(--text3)">▾</span></div>
+        <div class="help-a">${t.a}</div>
+      </div>`).join('')}
+    </div>`;
+  }).join('') || '<div style="color:var(--text3);text-align:center;padding:32px">No results found.</div>';
+}
+
+function toggleHelpAnswer(qEl){
+  const item=qEl.closest('.help-item');
+  item.classList.toggle('open');
+}
+
+// ══════════ BRANDING ══════════
+function saveBranding(){
+  const b={
+    name:document.getElementById('brand-name').value.trim(),
+    address:document.getElementById('brand-address').value.trim(),
+    tagline:document.getElementById('brand-tagline').value.trim()
+  };
+  DB.set('branding',b);
+  applyBranding();
+  showToast('Branding saved.');
+}
+
+function applyBranding(){
+  const b=DB.get('branding',{});
+  const nameEl=document.getElementById('pb-name');
+  const tagEl=document.getElementById('pb-tagline');
+  const addrEl=document.getElementById('pb-address');
+  if(nameEl) nameEl.textContent=b.name||'Orbit Homes';
+  if(tagEl) tagEl.textContent=b.tagline||'Property Management System';
+  if(addrEl) addrEl.textContent=b.address||'';
+}
+
+function renderBrandingSettings(){
+  const b=DB.get('branding',{});
+  const n=document.getElementById('brand-name');
+  const a=document.getElementById('brand-address');
+  const t=document.getElementById('brand-tagline');
+  if(n) n.value=b.name||'';
+  if(a) a.value=b.address||'';
+  if(t) t.value=b.tagline||'';
+}
+
+// ══════════ SETTINGS RENDER ══════════
+function renderSettings(){
+  renderSettingsLicence();
+  renderNoticesList();
+  renderBrandingSettings();
+  const isDark=!document.body.classList.contains('light');
+  const btn=document.getElementById('settings-theme-btn');
+  if(btn) btn.textContent=isDark?'Switch to Light':'Switch to Dark';
+}
+
+function clearAllData(){
+  if(!confirm('This will permanently delete ALL data. Are you sure?')) return;
+  ['properties','tenants','payments','maintenance','notices','tenantCreds'].forEach(k=>{ data[k]=[]; DB.set(k,[]); });
+  pushHistory();
+  navigate('dashboard');
+  showToast('All data cleared.');
+}
+
+// ══════════ INIT APP ══════════
+function initApp(){
+  seedDemoData();
+  rentYear=new Date().getFullYear();
+  rentMonth=new Date().getMonth();
+  initTheme();
+  initSidebar();
+  applyBranding();
+  pushHistory();
+  updateNotifBadge();
+
+  const hasPin = DB.get('adminPin', null);
+  if(!hasPin){
+    showOverlay('overlay-setup');
+    _pinBuf=''; _pinStep=0;
+    document.getElementById('setup-instruction').textContent='Create a 4-digit admin PIN';
+    clearPinDots('setup-dots');
+  } else {
+    showOverlay('overlay-login');
+    showLoginStep('login-step-role');
+  }
+}
+
+initApp();
 </script>
 </body>
 </html>
