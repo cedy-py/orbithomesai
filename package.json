@@ -1,6 +1,6 @@
 {
   "name": "orbit-homes",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Property Management System for Landlords and Real Estate Agencies in Africa",
   "main": "main.js",
   "scripts": {
