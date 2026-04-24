@@ -374,7 +374,7 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
   .sidebar,.topbar,.no-print,.tabs,.month-nav,.table-toolbar,.maint-actions,.actions-cell{display:none!important}
   .main{overflow:visible!important}
   .content{padding:0!important;overflow:visible!important}
-  body,html{background:#fff!important;color:#111!important;font-size:12px}
+  body,html{background:#fff!important;color:#111!important;font-size:11px;zoom:90%}
   .app{display:block;height:auto}
   .view{display:block!important}
   .view:not(.active){display:none!important}
@@ -409,35 +409,73 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
   .stats-grid{grid-template-columns:repeat(3,1fr)!important}
   .empty-state{color:#64748b}
 
-  @page{margin:20mm 15mm;size:A4}
-  @page:first{margin-top:15mm}
+  @page{margin:15mm 12mm;size:A4 portrait}
+  @page:first{margin-top:12mm}
+  table{table-layout:fixed;width:100%!important}
+  table th,table td{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .report-card{page-break-inside:avoid;break-inside:avoid}
+  .stats-grid{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:8px!important}
+  .stat-card{padding:12px!important}
+  .dashboard-grid{display:block!important}
 }
 
 /* ── AUTH OVERLAYS ── */
-.auth-overlay{position:fixed;inset:0;z-index:9000;background:var(--bg);display:none;align-items:center;justify-content:center;padding:20px}
+.auth-overlay{
+  position:fixed;inset:0;z-index:9000;
+  background:linear-gradient(135deg,#060b14 0%,#0a1220 50%,#060d18 100%);
+  display:none;align-items:center;justify-content:center;padding:20px;
+}
 .auth-overlay.visible{display:flex}
-.auth-card{background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:40px 36px;width:100%;max-width:440px;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,0.5)}
+.auth-card{
+  background:rgba(12,18,30,0.95);
+  border:1px solid rgba(0,174,239,0.18);
+  border-radius:18px;padding:40px 36px;width:100%;max-width:420px;
+  text-align:center;
+  box-shadow:0 0 0 1px rgba(26,107,60,0.08),0 24px 80px rgba(0,0,0,0.7),0 0 60px rgba(0,174,239,0.06);
+  backdrop-filter:blur(12px);
+}
+.auth-logo-wrap{margin:0 auto 20px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.auth-logo-circle{
+  width:58px;height:58px;border-radius:50%;
+  background:linear-gradient(135deg,#00AEEF,#0080CC);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;color:#fff;letter-spacing:-0.3px;
+  box-shadow:0 0 24px rgba(0,174,239,0.4),0 0 0 6px rgba(0,174,239,0.08);
+}
 .auth-logo-icon{width:64px;height:64px;background:linear-gradient(135deg,var(--brand),var(--brand-light));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 16px}
-.auth-brand{font-size:26px;font-weight:800;color:var(--text);margin-bottom:4px}
-.auth-sub{font-size:13px;color:var(--text3);margin-bottom:28px}
-.auth-back{background:none;border:none;color:var(--text3);cursor:pointer;font-size:12px;margin-bottom:16px;display:inline-flex;align-items:center;gap:4px;transition:color 0.15s}
-.auth-back:hover{color:var(--text)}
-.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px}
-.role-btn{background:var(--bg3);border:2px solid var(--border2);border-radius:12px;padding:22px 16px;cursor:pointer;transition:all 0.15s;text-align:center;user-select:none}
-.role-btn:hover{border-color:var(--brand);background:var(--brand-glow)}
-.role-btn .rb-icon{font-size:34px;margin-bottom:8px}
-.role-btn .rb-name{font-size:14px;font-weight:700;color:var(--text)}
-.role-btn .rb-desc{font-size:11px;color:var(--text3);margin-top:3px}
+.auth-brand{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px;letter-spacing:-0.3px}
+.auth-sub{font-size:13px;color:rgba(255,255,255,0.45);margin-bottom:28px;line-height:1.5}
+.auth-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(0,174,239,0.2),transparent);margin:0 -8px 24px}
+.auth-back{
+  background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;
+  font-size:12px;margin-bottom:16px;display:inline-flex;align-items:center;gap:4px;transition:color 0.15s;
+}
+.auth-back:hover{color:rgba(255,255,255,0.75)}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px}
+.role-btn{
+  background:rgba(255,255,255,0.04);
+  border:1.5px solid rgba(255,255,255,0.08);
+  border-radius:12px;padding:20px 14px;cursor:pointer;transition:all 0.18s;text-align:center;user-select:none;
+}
+.role-btn:hover{border-color:#00AEEF;background:rgba(0,174,239,0.08);box-shadow:0 0 20px rgba(0,174,239,0.12)}
+.role-btn .rb-icon{font-size:28px;margin-bottom:8px;opacity:0.85}
+.role-btn .rb-name{font-size:13px;font-weight:700;color:#fff}
+.role-btn .rb-desc{font-size:10.5px;color:rgba(255,255,255,0.38);margin-top:3px}
 .pin-display{display:flex;justify-content:center;gap:14px;margin:18px 0 22px}
-.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--border2);background:transparent;transition:all 0.15s}
-.pin-dot.filled{background:var(--brand);border-color:var(--brand)}
-.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:250px;margin:0 auto}
-.pk{background:var(--bg4);border:1px solid var(--border2);border-radius:10px;padding:15px;font-size:20px;font-weight:700;color:var(--text);cursor:pointer;transition:all 0.15s;text-align:center;user-select:none;line-height:1}
-.pk:hover{background:var(--brand);border-color:var(--brand);color:#fff}
-.pk:active{transform:scale(0.92)}
-.pk.pk-del{font-size:14px;color:var(--text3)}
-.pk.pk-ok{background:var(--accent);border-color:var(--accent);color:#fff;font-size:14px}
-.pk.pk-ok:hover{background:var(--accent-light)}
+.pin-dot{width:13px;height:13px;border-radius:50%;border:2px solid rgba(255,255,255,0.18);background:transparent;transition:all 0.15s}
+.pin-dot.filled{background:#00AEEF;border-color:#00AEEF;box-shadow:0 0 8px rgba(0,174,239,0.5)}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:240px;margin:0 auto}
+.pk{
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:10px;padding:15px;font-size:20px;font-weight:700;
+  color:#fff;cursor:pointer;transition:all 0.15s;text-align:center;user-select:none;line-height:1;
+}
+.pk:hover{background:rgba(0,174,239,0.18);border-color:#00AEEF;color:#fff}
+.pk:active{transform:scale(0.93)}
+.pk.pk-del{font-size:14px;color:rgba(255,255,255,0.5)}
+.pk.pk-ok{background:#1A6B3C;border-color:#1A6B3C;color:#fff;font-size:14px}
+.pk.pk-ok:hover{background:#27ae60;border-color:#27ae60}
 .lic-demo{background:var(--bg3);border-radius:10px;padding:14px;margin-top:16px;text-align:left;font-size:12px;color:var(--text3)}
 .lic-demo strong{color:var(--text2);display:block;margin-bottom:6px}
 .lic-demo code{background:var(--bg4);padding:2px 7px;border-radius:4px;color:var(--accent-light);font-family:monospace;font-size:11px;cursor:pointer;user-select:all}
@@ -473,6 +511,10 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
 .notice-item .n-title{font-size:13px;font-weight:600;color:var(--text)}
 .notice-item .n-date{font-size:11px;color:var(--text3);margin-top:2px}
 .notice-item .n-body{font-size:12px;color:var(--text2);margin-top:6px;line-height:1.6}
+
+/* ── AVATAR MENU ── */
+.avatar-menu-item{display:block;width:100%;text-align:left;background:none;border:none;padding:10px 14px;font-size:13px;color:var(--text);cursor:pointer;transition:background 0.12s}
+.avatar-menu-item:hover{background:var(--bg4)}
 
 /* ── HELP CENTRE ── */
 .help-accordion{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:12px}
@@ -537,9 +579,10 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
 <!-- ══════════ FIRST-RUN SETUP ══════════ -->
 <div class="auth-overlay" id="overlay-setup">
   <div class="auth-card">
-    <div class="auth-logo-icon">🏠</div>
+    <div class="auth-logo-wrap"><div class="auth-logo-circle">OH</div></div>
     <div class="auth-brand">Welcome to Orbit Homes</div>
     <div class="auth-sub">Create a 4-digit admin PIN to secure your account</div>
+    <div class="auth-divider"></div>
     <div class="pin-display" id="setup-dots">
       <div class="pin-dot" id="sd0"></div><div class="pin-dot" id="sd1"></div>
       <div class="pin-dot" id="sd2"></div><div class="pin-dot" id="sd3"></div>
@@ -560,9 +603,10 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
   <div class="auth-card" id="login-card">
     <!-- Step 1: role selection -->
     <div id="login-step-role">
-      <div class="auth-logo-icon">🏠</div>
+      <div class="auth-logo-wrap"><div class="auth-logo-circle">OH</div></div>
       <div class="auth-brand">Orbit Homes</div>
-      <div class="auth-sub">Who are you logging in as?</div>
+      <div class="auth-sub">Select your login type to continue</div>
+      <div class="auth-divider"></div>
       <div class="role-grid">
         <div class="role-btn" onclick="selectLoginRole('admin')">
           <div class="rb-icon">👔</div>
@@ -579,9 +623,10 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
     <!-- Step 2a: admin PIN -->
     <div id="login-step-admin" style="display:none">
       <button class="auth-back" onclick="loginBack()">← Back</button>
-      <div class="auth-logo-icon" style="background:linear-gradient(135deg,var(--brand),var(--brand-light))">👔</div>
+      <div class="auth-logo-wrap"><div class="auth-logo-circle" style="background:linear-gradient(135deg,#00AEEF,#0080CC)">OH</div></div>
       <div class="auth-brand">Admin Login</div>
       <div class="auth-sub">Enter your 4-digit PIN</div>
+      <div class="auth-divider"></div>
       <div class="pin-display" id="admin-dots">
         <div class="pin-dot"></div><div class="pin-dot"></div>
         <div class="pin-dot"></div><div class="pin-dot"></div>
@@ -598,9 +643,10 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
     <!-- Step 2b: tenant phone -->
     <div id="login-step-tenant" style="display:none">
       <button class="auth-back" onclick="loginBack()">← Back</button>
-      <div class="auth-logo-icon" style="background:linear-gradient(135deg,var(--accent),var(--accent-light))">🏡</div>
+      <div class="auth-logo-wrap"><div class="auth-logo-circle" style="background:linear-gradient(135deg,#1A6B3C,#27ae60)">OH</div></div>
       <div class="auth-brand">Tenant Login</div>
       <div class="auth-sub">Enter your registered phone number</div>
+      <div class="auth-divider"></div>
       <div class="form-group" style="text-align:left;margin-bottom:14px">
         <label>Phone Number</label>
         <input type="tel" id="tenant-login-phone" placeholder="+254 712 345 678">
@@ -611,9 +657,10 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
     <!-- Step 2c: tenant PIN -->
     <div id="login-step-tenant-pin" style="display:none">
       <button class="auth-back" onclick="showLoginStep('login-step-tenant')">← Back</button>
-      <div class="auth-logo-icon" style="background:linear-gradient(135deg,var(--accent),var(--accent-light))">🔒</div>
+      <div class="auth-logo-wrap"><div class="auth-logo-circle" style="background:linear-gradient(135deg,#1A6B3C,#27ae60)">OH</div></div>
       <div class="auth-brand">Enter PIN</div>
       <div class="auth-sub" id="tenant-pin-sub">4-digit portal PIN</div>
+      <div class="auth-divider"></div>
       <div class="pin-display" id="tenant-pin-dots">
         <div class="pin-dot"></div><div class="pin-dot"></div>
         <div class="pin-dot"></div><div class="pin-dot"></div>
@@ -675,12 +722,6 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
 
 <!-- ══════════ SIDEBAR ══════════ -->
 <aside class="sidebar" id="sidebar">
-  <button class="sb-arrow" onclick="toggleSidebar()" title="Expand / collapse" aria-label="Toggle sidebar">
-    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-      <path d="M2 4l4 4 4-4"/>
-    </svg>
-  </button>
-
   <div class="sidebar-logo" onclick="toggleSidebar()">
     <div class="logo-mark">
       <div class="logo-circle">OH</div>
@@ -765,15 +806,6 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
       <span class="nav-label">Reports</span>
     </button>
 
-    <button class="nav-item" data-view="help" data-tip="Help Centre">
-      <span class="ni"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-        <circle cx="10" cy="10" r="8"/>
-        <path d="M7.5 7.5a2.5 2.5 0 0 1 5 0c0 1.4-2.5 2-2.5 3.5"/>
-        <circle cx="10" cy="15" r="0.8" fill="currentColor" stroke="none"/>
-      </svg></span>
-      <span class="nav-label">Help Centre</span>
-    </button>
-
     <button class="nav-item" data-view="settings" data-tip="Settings">
       <span class="ni"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
         <circle cx="10" cy="10" r="3"/>
@@ -783,9 +815,19 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
     </button>
   </nav>
 
+  <div style="padding:0 6px 6px;flex-shrink:0">
+    <button class="nav-item" data-view="help" data-tip="Help Centre" style="margin-bottom:0">
+      <span class="ni"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <circle cx="10" cy="10" r="8"/>
+        <path d="M7.5 7.5a2.5 2.5 0 0 1 5 0c0 1.4-2.5 2-2.5 3.5"/>
+        <circle cx="10" cy="15" r="0.8" fill="currentColor" stroke="none"/>
+      </svg></span>
+      <span class="nav-label">Help Centre</span>
+    </button>
+  </div>
+
   <div class="sidebar-footer">
-    <span class="sf-icon">🏠</span>
-    <span class="sf-text">Orbit Homes v1.2.0 · Local data</span>
+    <span class="sf-text" style="opacity:0.5;font-size:10px">v1.2.0</span>
   </div>
 </aside>
 
@@ -800,7 +842,26 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
       <button class="btn btn-secondary btn-icon no-print" id="btn-undo" onclick="undo()" title="Undo (Ctrl+Z)" disabled>↩</button>
       <button class="btn btn-secondary btn-icon no-print" id="btn-redo" onclick="redo()" title="Redo (Ctrl+Y)" disabled>↪</button>
       <div class="topbar-sep no-print"></div>
+      <button class="btn btn-secondary btn-icon no-print" id="btn-notif" onclick="navigate('notifications')" title="Notifications" style="position:relative">
+        🔔<span id="topbar-notif-badge" style="display:none;position:absolute;top:3px;right:3px;width:8px;height:8px;background:var(--red);border-radius:50%"></span>
+      </button>
+      <div class="topbar-sep no-print"></div>
       <button class="btn btn-secondary btn-icon no-print" id="btn-theme" onclick="toggleTheme()" title="Toggle light/dark mode">🌙</button>
+      <div class="topbar-sep no-print"></div>
+      <div style="position:relative" id="avatar-wrap">
+        <button class="btn btn-secondary no-print" id="btn-avatar" onclick="toggleAvatarMenu()" title="Admin menu" style="padding:5px 10px;gap:6px;font-size:13px">
+          <span style="width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#00AEEF,#1A6B3C);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0">A</span>
+          <span class="avatar-caret" style="font-size:10px;opacity:0.6">▾</span>
+        </button>
+        <div id="avatar-menu" style="display:none;position:absolute;top:calc(100% + 6px);right:0;background:var(--card2);border:1px solid var(--border);border-radius:10px;min-width:180px;box-shadow:0 8px 30px rgba(0,0,0,0.4);z-index:500;overflow:hidden">
+          <button class="avatar-menu-item" onclick="closeAvatarMenu();navigate('settings')">👤 My Account</button>
+          <button class="avatar-menu-item" onclick="closeAvatarMenu();switchUser()">🔄 Switch User</button>
+          <button class="avatar-menu-item" onclick="closeAvatarMenu();navigate('settings')">🔑 Licence Activator</button>
+          <button class="avatar-menu-item" onclick="closeAvatarMenu();showToast('No updates available.','success')">⬆ Install Updates</button>
+          <div style="height:1px;background:var(--border2);margin:4px 0"></div>
+          <button class="avatar-menu-item" style="color:var(--red)" onclick="closeAvatarMenu();signOut()">⏻ Sign Out</button>
+        </div>
+      </div>
       <div class="topbar-sep no-print"></div>
       <div id="topbar-actions"></div>
     </div>
@@ -977,6 +1038,16 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
           </div>
         </div>
         <div class="settings-section">
+          <div class="settings-section-title">Region &amp; Payments</div>
+          <div class="settings-row">
+            <div><div class="settings-label">Region</div><div class="settings-desc">Sets which mobile money providers appear in the payment portal</div></div>
+            <select id="region-select" onchange="saveRegion(this.value)" style="padding:7px 10px;border-radius:7px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:13px">
+              <option value="west">West Africa (MTN, Orange, Wave…)</option>
+              <option value="east">East Africa (M-Pesa, Airtel, T-Kash…)</option>
+            </select>
+          </div>
+        </div>
+        <div class="settings-section">
           <div class="settings-section-title">Licence</div>
           <div id="settings-licence-info" style="padding:12px 0"></div>
           <div class="settings-row">
@@ -1100,21 +1171,16 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
 
 <!-- Tenant Payment Modal -->
 <div class="modal-overlay" id="modal-tenant-payment">
-  <div class="modal">
+  <div class="modal" style="max-width:600px">
     <div class="modal-header"><h2>Make a Payment</h2><button class="modal-close" onclick="closeModal('modal-tenant-payment')">✕</button></div>
     <div class="modal-body">
-      <div class="form-group"><label>Amount (KES) *</label><input type="number" id="tp-amount" placeholder="e.g. 25000" min="0"></div>
+      <div class="form-group"><label>Amount *</label><input type="number" id="tp-amount" placeholder="e.g. 25000" min="0"></div>
       <div class="form-group"><label>Payment Method</label>
-        <div class="pay-methods" style="margin-top:8px">
-          <button class="pm-btn active" id="pm-mtn" onclick="selectPM('mtn')">📱 MTN Mobile Money</button>
-          <button class="pm-btn" id="pm-orange" onclick="selectPM('orange')">🟠 Orange Money</button>
-          <button class="pm-btn" id="pm-card" onclick="selectPM('card')">💳 Card Payment</button>
-          <button class="pm-btn" id="pm-bank" onclick="selectPM('bank')">🏦 Bank Transfer</button>
-        </div>
+        <div id="pm-buttons" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px"></div>
       </div>
       <div class="form-group" id="pm-ref-row"><label>Reference / Receipt No.</label><input type="text" id="tp-ref" placeholder="Transaction reference"></div>
       <div class="form-group"><label>Payment Date</label><input type="date" id="tp-date"></div>
-      <div id="tp-sim-msg" style="background:var(--accent-bg);border:1px solid var(--accent);border-radius:8px;padding:12px;display:none;margin-top:8px;color:var(--accent-light);font-size:13px"></div>
+      <div id="tp-sim-msg" style="background:var(--accent-bg);border:1px solid var(--accent);border-radius:8px;padding:12px;display:none;margin-top:8px;color:var(--accent-light);font-size:13px;line-height:1.6"></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-secondary" onclick="closeModal('modal-tenant-payment')">Cancel</button>
@@ -1156,6 +1222,37 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
     <div class="modal-footer">
       <button class="btn btn-secondary" onclick="closeModal('modal-tenant-creds')">Cancel</button>
       <button class="btn btn-primary" onclick="saveTenantCreds()">Save Access</button>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden Licence Key Generator (Ctrl+Shift+K) -->
+<div class="modal-overlay" id="modal-keygen">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header"><h2>Licence Key Generator</h2><button class="modal-close" onclick="closeModal('modal-keygen')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label>Tier</label>
+          <select id="kg-tier">
+            <option value="STARTER">Starter (10 props)</option>
+            <option value="PRO">Pro (50 props)</option>
+            <option value="AGENCY">Agency (Unlimited)</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Expiry Year</label>
+          <input type="number" id="kg-year" value="2027" min="2025" max="2035">
+        </div>
+        <div class="form-group form-full"><label>Custom Suffix (optional)</label>
+          <input type="text" id="kg-suffix" placeholder="e.g. CUST01" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+        </div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="generateKey()">Generate Key</button>
+      <div id="kg-result" style="margin-top:14px;display:none">
+        <div style="background:var(--bg3);border-radius:8px;padding:12px 14px">
+          <div style="font-size:11px;color:var(--text3);margin-bottom:6px">Generated Key (click to copy)</div>
+          <code id="kg-key-display" onclick="copyKeyGen()" style="font-family:monospace;font-size:14px;color:var(--accent-light);cursor:pointer;user-select:all;display:block;text-align:center;padding:4px"></code>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -1328,7 +1425,31 @@ function updateNotifBadge() {
   const unread = alerts.filter(a => !seenNotifKeys.has(alertKey(a))).length;
   const badge = document.getElementById('notif-badge');
   if (badge) { badge.textContent = unread; badge.style.display = unread > 0 ? '' : 'none'; }
+  const topBadge = document.getElementById('topbar-notif-badge');
+  if (topBadge) topBadge.style.display = unread > 0 ? '' : 'none';
 }
+
+function toggleAvatarMenu(){
+  const m=document.getElementById('avatar-menu');
+  m.style.display=m.style.display==='none'?'block':'none';
+}
+function closeAvatarMenu(){
+  const m=document.getElementById('avatar-menu');
+  if(m) m.style.display='none';
+}
+function switchUser(){
+  showOverlay('overlay-login');
+  showLoginStep('login-step-role');
+}
+function signOut(){
+  if(!confirm('Sign out and return to login?')) return;
+  showOverlay('overlay-login');
+  showLoginStep('login-step-role');
+}
+document.addEventListener('click',e=>{
+  const wrap=document.getElementById('avatar-wrap');
+  if(wrap&&!wrap.contains(e.target)) closeAvatarMenu();
+});
 
 function renderNotifications() {
   markAllNotifsRead();
@@ -1821,6 +1942,33 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));closeConfirm();}
   if((e.ctrlKey||e.metaKey)&&e.key==='z'&&!e.shiftKey){e.preventDefault();undo();}
   if((e.ctrlKey||e.metaKey)&&(e.key==='y'||(e.key==='z'&&e.shiftKey))){e.preventDefault();redo();}
+  if(e.ctrlKey&&e.shiftKey&&e.key==='K'){e.preventDefault();openKeyGen();return;}
+  // Physical keyboard for PIN pads
+  const digit=/^[0-9]$/.test(e.key);
+  const isDel=e.key==='Backspace'||e.key==='Delete';
+  const isEnter=e.key==='Enter';
+  const setupVisible=document.getElementById('overlay-setup').classList.contains('visible');
+  const loginVisible=document.getElementById('overlay-login').classList.contains('visible');
+  const adminStep=loginVisible&&document.getElementById('login-step-admin').style.display!=='none';
+  const tenantPinStep=loginVisible&&document.getElementById('login-step-tenant-pin').style.display!=='none';
+  const tenantPhoneStep=loginVisible&&document.getElementById('login-step-tenant').style.display!=='none';
+  if(setupVisible){
+    if(digit)setupPinKey(e.key);
+    else if(isDel)setupPinKey('DEL');
+    else if(isEnter&&_pinBuf.length===PIN_LEN)setupPinKey('OK');
+    return;
+  }
+  if(adminStep){
+    if(digit)adminPinKey(e.key);
+    else if(isDel)adminPinKey('DEL');
+    return;
+  }
+  if(tenantPinStep){
+    if(digit)tenantPinKey(e.key);
+    else if(isDel)tenantPinKey('DEL');
+    return;
+  }
+  if(tenantPhoneStep&&isEnter){tenantPhoneNext();return;}
 });
 
 // ══════════ CONFIRM ══════════
@@ -2002,6 +2150,7 @@ function showLoginStep(step){
   });
   _pinBuf='';
   clearPinDots('admin-dots');
+  clearPinDots('tenant-pin-dots');
 }
 
 function loginBack(){
@@ -2077,7 +2226,7 @@ function renderTenantLease(){
   return `<div style="display:grid;gap:12px;padding:4px 0">
     <div class="t-card"><div style="color:var(--text3);font-size:12px;margin-bottom:4px">Property</div><div style="font-weight:600">${prop.name||'—'}</div></div>
     <div class="t-card"><div style="color:var(--text3);font-size:12px;margin-bottom:4px">Unit</div><div style="font-weight:600">${t.unit}</div></div>
-    <div class="t-card"><div style="color:var(--text3);font-size:12px;margin-bottom:4px">Monthly Rent</div><div style="font-weight:600;color:var(--accent-light)">KES ${fmt(t.monthlyRent)}</div></div>
+    <div class="t-card"><div style="color:var(--text3);font-size:12px;margin-bottom:4px">Monthly Rent</div><div style="font-weight:600;color:var(--accent-light)">${fmt(t.monthlyRent)}</div></div>
     <div class="t-card"><div style="color:var(--text3);font-size:12px;margin-bottom:4px">Lease Period</div><div style="font-weight:600">${t.leaseStart} → ${t.leaseEnd}</div></div>
     <div class="t-card"><div style="color:var(--text3);font-size:12px;margin-bottom:4px">Days Remaining</div><div style="font-weight:600;color:${daysLeft<30?'var(--red)':'var(--text)'}">${daysLeft} days</div></div>
   </div>`;
@@ -2134,31 +2283,12 @@ function renderTenantNotices(){
 }
 
 function openTenantPaymentModal(){
-  _selectedPM='mtn';
-  document.querySelectorAll('.pm-btn').forEach(b=>b.classList.remove('active'));
-  const firstBtn=document.getElementById('pm-mtn');
-  if(firstBtn) firstBtn.classList.add('active');
   document.getElementById('tp-amount').value = currentTenantUser ? currentTenantUser.monthlyRent : '';
   document.getElementById('tp-ref').value = '';
   document.getElementById('tp-date').value = today();
   document.getElementById('tp-sim-msg').style.display='none';
   openModal('modal-tenant-payment');
-}
-
-function selectPM(pm){
-  _selectedPM=pm;
-  ['mtn','orange','card','bank'].forEach(id=>{
-    const btn=document.getElementById('pm-'+id);
-    if(btn) btn.classList.toggle('active',id===pm);
-  });
-  const msgs={
-    mtn:'Dial *165# on your MTN line, select Pay Bill, enter reference from above, and confirm with your PIN.',
-    orange:'Dial *144# on your Orange line, select Mobile Money → Pay, and follow the prompts.',
-    card:'Enter your card details securely via the card terminal or online portal provided by your landlord.',
-    bank:'Transfer to: Bank: Equity Bank · Account: 0123456789 · Name: Orbit Homes · Ref: Your Unit Number'
-  };
-  const sim=document.getElementById('tp-sim-msg');
-  if(sim){ sim.style.display='block'; sim.textContent=msgs[pm]||''; }
+  renderPaymentButtons();
 }
 
 function processTenantPayment(){
@@ -2250,6 +2380,80 @@ function saveTenantCreds(){
   showToast('Portal access saved for tenant.');
 }
 
+// ══════════ REGION & PAYMENTS ══════════
+const PAYMENT_METHODS = {
+  west: [
+    { id:'mtn',   icon:'📱', name:'MTN MoMo',     msg:'Dial *165# → Pay Bill, enter merchant code and confirm with PIN.' },
+    { id:'orange',icon:'🟠', name:'Orange Money',  msg:'Dial *144# → Mobile Money → Pay, follow the prompts.' },
+    { id:'airtel',icon:'📶', name:'Airtel Money',  msg:'Dial *500# → Send Money / Pay, enter merchant and confirm.' },
+    { id:'moov',  icon:'💜', name:'Moov Money',    msg:'Dial *555# → Payment, select Pay Merchant and confirm.' },
+    { id:'wave',  icon:'🌊', name:'Wave',          msg:'Open the Wave app, tap Send / Pay Merchant, scan QR or enter code.' },
+    { id:'visa',  icon:'💳', name:'Visa/Mastercard',msg:'Enter your card details via the secure payment terminal or online.' },
+    { id:'bank',  icon:'🏦', name:'Bank Transfer', msg:'Transfer to: Bank: Barclays · Account: 0123456789 · Name: Orbit Homes · Ref: Unit Number.' },
+  ],
+  east: [
+    { id:'mpesa',  icon:'📲', name:'M-Pesa',        msg:'Go to M-Pesa → Lipa na M-Pesa → Pay Bill. Business No: 123456. Acct: Your unit.' },
+    { id:'mtnug',  icon:'📱', name:'MTN MoMo UG',   msg:'Dial *165# → Pay Bill, enter the merchant code and confirm PIN.' },
+    { id:'airtelug',icon:'📶',name:'Airtel Uganda',  msg:'Dial *185# → Make Payments → Pay a Business, enter code and confirm.' },
+    { id:'airteltz',icon:'📶',name:'Airtel Tanzania', msg:'Dial *150*60# → Lipa → Pay Bill, enter the business number.' },
+    { id:'equity', icon:'🏦', name:'Equity Bank',    msg:'EazzyBiz app or bank branch transfer. Ref: Your unit number.' },
+    { id:'tkash',  icon:'📳', name:'T-Kash',         msg:'Dial *4# → Payments → Pay Bill, enter biller code and confirm.' },
+    { id:'visa',   icon:'💳', name:'Visa/Mastercard',msg:'Enter your card details via the secure payment terminal or online.' },
+    { id:'bank',   icon:'🏦', name:'Bank Transfer',  msg:'Transfer to: Bank: Equity Bank · Account: 0123456789 · Ref: Unit Number.' },
+  ],
+};
+
+function getRegion(){ return DB.get('region','east'); }
+function saveRegion(v){ DB.set('region',v); showToast('Region updated.'); }
+
+function renderPaymentButtons(){
+  const region = getRegion();
+  const methods = PAYMENT_METHODS[region] || PAYMENT_METHODS.east;
+  const wrap = document.getElementById('pm-buttons');
+  if(!wrap) return;
+  wrap.innerHTML = methods.map((m,i)=>`<button class="pm-btn${i===0?' active':''}" id="pm-${m.id}" onclick="selectPM('${m.id}')"><div class="pm-ico">${m.icon}</div><div class="pm-name">${m.name}</div></button>`).join('');
+  _selectedPM = methods[0].id;
+  const sim = document.getElementById('tp-sim-msg');
+  if(sim){ sim.style.display='block'; sim.textContent=methods[0].msg; }
+}
+
+function selectPM(pm){
+  _selectedPM = pm;
+  const region = getRegion();
+  const methods = (PAYMENT_METHODS[region] || PAYMENT_METHODS.east);
+  methods.forEach(m=>{
+    const btn = document.getElementById('pm-'+m.id);
+    if(btn) btn.classList.toggle('active', m.id===pm);
+  });
+  const method = methods.find(m=>m.id===pm);
+  const sim = document.getElementById('tp-sim-msg');
+  if(sim && method){ sim.style.display='block'; sim.textContent=method.msg; }
+}
+
+// ══════════ HIDDEN KEY GENERATOR ══════════
+function openKeyGen(){ openModal('modal-keygen'); }
+
+function generateKey(){
+  const tier = document.getElementById('kg-tier').value;
+  const year = document.getElementById('kg-year').value || '2027';
+  const suffix = document.getElementById('kg-suffix').value.trim();
+  const rand = Math.random().toString(36).slice(2,8).toUpperCase();
+  const key = suffix ? `OH-${tier}-${year}-${rand}-${suffix}` : `OH-${tier}-${year}-${rand}`;
+  document.getElementById('kg-key-display').textContent = key;
+  document.getElementById('kg-result').style.display = 'block';
+}
+
+function copyKeyGen(){
+  const key = document.getElementById('kg-key-display').textContent;
+  navigator.clipboard.writeText(key).then(()=>showToast('Key copied!'));
+}
+
+// ══════════ REGION SETTING INIT ══════════
+function initRegionSelect(){
+  const sel = document.getElementById('region-select');
+  if(sel) sel.value = getRegion();
+}
+
 // ══════════ HELP CENTRE ══════════
 const HELP_TOPICS = [
   { cat:'Getting Started', icon:'🚀', q:'How do I add my first property?', a:'Click Properties in the sidebar → Add Property button. Fill in the name, address, type, number of units and monthly rent, then save.' },
@@ -2267,7 +2471,7 @@ const HELP_TOPICS = [
   { cat:'Licence', icon:'🔑', q:'How do I activate a licence?', a:'Go to Settings → Activate Licence. Enter your licence key and click Activate. Demo keys: OH-STARTER-2024-DEMO, OH-PRO-2024-DEMO, OH-AGENCY-2024-DEMO.' },
   { cat:'Data & Privacy', icon:'🗄️', q:'Where is my data stored?', a:'All data is stored locally on this device using your browser\'s localStorage. Nothing is sent to any server. Clearing your browser data or app storage will erase it.' },
   { cat:'Data & Privacy', icon:'🗄️', q:'How do I back up my data?', a:'Currently backup is manual — you can export reports from the Reports view. A full data export feature is planned for a future update.' },
-  { cat:'Shortcuts', icon:'⌨️', q:'What keyboard shortcuts are available?', a:'Ctrl+Z — Undo · Ctrl+Y — Redo · Ctrl+P — Print report · F11 — Full screen · Ctrl+= — Zoom in · Ctrl+- — Zoom out' },
+  { cat:'Shortcuts', icon:'⌨️', q:'What keyboard shortcuts are available?', a:'Ctrl+Z — Undo · Ctrl+Y — Redo · Ctrl+P — Print report · F11 — Full screen · Ctrl+= — Zoom in · Ctrl+- — Zoom out · Backspace — Delete PIN digit on login screens' },
 ];
 
 function renderHelp(){
@@ -2334,6 +2538,7 @@ function renderSettings(){
   renderSettingsLicence();
   renderNoticesList();
   renderBrandingSettings();
+  initRegionSelect();
   const isDark=!document.body.classList.contains('light');
   const btn=document.getElementById('settings-theme-btn');
   if(btn) btn.textContent=isDark?'Switch to Light':'Switch to Dark';
