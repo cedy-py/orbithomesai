@@ -857,7 +857,7 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
           <button class="avatar-menu-item" onclick="closeAvatarMenu();navigate('settings')">👤 My Account</button>
           <button class="avatar-menu-item" onclick="closeAvatarMenu();switchUser()">🔄 Switch User</button>
           <button class="avatar-menu-item" onclick="closeAvatarMenu();navigate('settings')">🔑 Licence Activator</button>
-          <button class="avatar-menu-item" onclick="closeAvatarMenu();showToast('No updates available.','success')">⬆ Install Updates</button>
+          <button class="avatar-menu-item" onclick="closeAvatarMenu();installUpdate()">⬆ Install Updates</button>
           <div style="height:1px;background:var(--border2);margin:4px 0"></div>
           <button class="avatar-menu-item" style="color:var(--red)" onclick="closeAvatarMenu();signOut()">⏻ Sign Out</button>
         </div>
@@ -2550,6 +2550,37 @@ function clearAllData(){
   pushHistory();
   navigate('dashboard');
   showToast('All data cleared.');
+}
+
+// ══════════ IN-APP UPDATE ══════════
+function installUpdate() {
+  if (window.electronAPI && window.electronAPI.isElectron) {
+    window.electronAPI.installUpdate();
+    return;
+  }
+  // Standalone browser fallback — file-picker replace
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.html';
+  input.onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (!file.name.toLowerCase().includes('orbit-homes')) {
+      showToast('Please select a valid orbit-homes HTML file.', 'error');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      showToast('Update loaded. Replacing page…', 'success');
+      setTimeout(() => {
+        document.open();
+        document.write(reader.result);
+        document.close();
+      }, 800);
+    };
+    reader.readAsText(file);
+  };
+  input.click();
 }
 
 // ══════════ INIT APP ══════════

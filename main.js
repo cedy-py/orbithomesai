@@ -1,7 +1,17 @@
-const { app, BrowserWindow, Menu, shell, dialog } = require('electron');
+const { app, BrowserWindow, Menu, shell, dialog, ipcMain } = require('electron');
 const path = require('path');
+const fs = require('fs');
+
+const APP_VERSION = '1.2.0';
 
 let mainWindow;
+
+function getHtmlTargetPath() {
+  if (app.isPackaged) {
+    return path.join(process.resourcesPath, 'app', 'orbit-homes.html');
+  }
+  return path.join(__dirname, 'orbit-homes.html');
+}
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -12,11 +22,13 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      webSecurity: false
+      webSecurity: false,
+      preload: path.join(__dirname, 'preload.js'),
     },
     titleBarStyle: 'default',
     show: false,
-    backgroundColor: '#0f0f1a'
+    backgroundColor: '#0f0f1a',
+    icon: path.join(__dirname, 'icon.ico'),
   });
 
   mainWindow.loadFile('orbit-homes.html');
@@ -37,11 +49,11 @@ function createWindow() {
         {
           label: 'Print Report',
           accelerator: 'CmdOrCtrl+P',
-          click: () => mainWindow.webContents.executeJavaScript('window.print()')
+          click: () => mainWindow.webContents.executeJavaScript('window.print()'),
         },
         { type: 'separator' },
-        { role: 'quit', label: 'Exit' }
-      ]
+        { role: 'quit', label: 'Exit' },
+      ],
     },
     {
       label: 'View',
@@ -53,8 +65,8 @@ function createWindow() {
         { role: 'zoomIn', accelerator: 'CmdOrCtrl+=' },
         { role: 'zoomOut' },
         { type: 'separator' },
-        { role: 'togglefullscreen' }
-      ]
+        { role: 'togglefullscreen' },
+      ],
     },
     {
       label: 'Help',
@@ -65,51 +77,63 @@ function createWindow() {
             dialog.showMessageBox(mainWindow, {
               type: 'info',
               title: 'About Orbit Homes',
-              message: 'Orbit Homes v1.1.0',
-              detail: 'Property Management System for Landlords and Real Estate Agencies in Africa.\n\nAll data is stored locally on your device.\nNo internet connection required.'
+              message: `Orbit Homes v${APP_VERSION}`,
+              detail:
+                'Property Management System for Landlords and Real Estate Agencies in Africa.\n\nAll data is stored locally on your device.\nNo internet connection required.',
             });
-          }
+          },
         },
         { type: 'separator' },
         {
-          label: 'Check for Updates…',
-          click: () => {
-            dialog.showMessageBox(mainWindow, {
-              type: 'info',
-              title: 'Check for Updates',
-              message: 'You are running Orbit Homes v1.1.0',
-              detail: 'To check for a newer version, visit the official Orbit Homes download page or contact your system administrator.\n\nCurrent version: 1.1.0\nRelease date: April 2026'
-            });
-          }
+          label: 'Install Update from File…',
+          click: () => triggerInstallUpdate(),
         },
-        {
-          label: 'Install Updates…',
-          click: () => {
-            const choice = dialog.showMessageBoxSync(mainWindow, {
-              type: 'question',
-              buttons: ['Download & Install', 'Cancel'],
-              defaultId: 0,
-              cancelId: 1,
-              title: 'Install Updates',
-              message: 'Install the latest version of Orbit Homes?',
-              detail: 'The app will close and relaunch after the update is applied.\n\nNote: Your data is stored locally and will not be affected by the update.'
-            });
-            if (choice === 0) {
-              dialog.showMessageBox(mainWindow, {
-                type: 'info',
-                title: 'Up to Date',
-                message: 'Orbit Homes is already up to date.',
-                detail: 'You are running the latest version (v1.1.0).'
-              });
-            }
-          }
-        }
-      ]
-    }
+      ],
+    },
   ]);
 
   Menu.setApplicationMenu(menu);
 }
+
+async function triggerInstallUpdate() {
+  const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
+    title: 'Select Orbit Homes Update File',
+    filters: [{ name: 'Orbit Homes HTML', extensions: ['html'] }],
+    properties: ['openFile'],
+  });
+
+  if (canceled || !filePaths.length) return;
+
+  const selected = filePaths[0];
+
+  const confirm = dialog.showMessageBoxSync(mainWindow, {
+    type: 'question',
+    buttons: ['Install & Reload', 'Cancel'],
+    defaultId: 0,
+    cancelId: 1,
+    title: 'Install Update',
+    message: 'Install this update?',
+    detail: `File: ${path.basename(selected)}\n\nThe app will reload after installing. All your data will be preserved.`,
+  });
+
+  if (confirm !== 0) return;
+
+  try {
+    const target = getHtmlTargetPath();
+    fs.copyFileSync(selected, target);
+    mainWindow.reload();
+  } catch (err) {
+    dialog.showErrorBox(
+      'Update Failed',
+      `Could not install the update:\n\n${err.message}\n\nTry running the app as administrator.`
+    );
+  }
+}
+
+ipcMain.handle('install-update', async () => {
+  await triggerInstallUpdate();
+  return { success: true };
+});
 
 app.whenReady().then(createWindow);
 

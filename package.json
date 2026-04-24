@@ -11,9 +11,16 @@
   "build": {
     "appId": "com.orbithomes.app",
     "productName": "Orbit Homes",
+    "asar": false,
     "directories": {
       "output": "dist"
     },
+    "files": [
+      "orbit-homes.html",
+      "main.js",
+      "preload.js",
+      "package.json"
+    ],
     "win": {
       "target": "nsis"
     },
