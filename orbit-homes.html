@@ -464,9 +464,9 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
     <button class="btn btn-primary" style="width:100%;padding:11px" onclick="activateLicence()">Activate</button>
     <div class="lic-demo">
       <strong>Demo Licence Keys (click to copy):</strong>
-      <code onclick="document.getElementById('lic-input').value='OH-STARTER-DEMO'">OH-STARTER-DEMO</code> — Starter (10 properties)<br style="margin:4px 0">
-      <code onclick="document.getElementById('lic-input').value='OH-PRO-DEMO'">OH-PRO-DEMO</code> — Pro (50 properties)<br style="margin:4px 0">
-      <code onclick="document.getElementById('lic-input').value='OH-AGENCY-DEMO'">OH-AGENCY-DEMO</code> — Agency (unlimited)
+      <code onclick="document.getElementById('lic-input').value='OH-STARTER-2024-DEMO'">OH-STARTER-2024-DEMO</code> — Starter (10 properties)<br style="margin:4px 0">
+      <code onclick="document.getElementById('lic-input').value='OH-PRO-2024-DEMO'">OH-PRO-2024-DEMO</code> — Pro (50 properties)<br style="margin:4px 0">
+      <code onclick="document.getElementById('lic-input').value='OH-AGENCY-2024-DEMO'">OH-AGENCY-2024-DEMO</code> — Agency (unlimited)
     </div>
     <div id="lic-error" style="color:var(--red);font-size:12px;margin-top:10px;display:none"></div>
   </div>
@@ -520,9 +520,9 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
       <div class="auth-logo-icon" style="background:linear-gradient(135deg,var(--brand),var(--brand-light))">👔</div>
       <div class="auth-brand">Admin Login</div>
       <div class="auth-sub">Enter your 4-digit PIN</div>
-      <div class="pin-display">
-        <div class="pin-dot" id="apd0"></div><div class="pin-dot" id="apd1"></div>
-        <div class="pin-dot" id="apd2"></div><div class="pin-dot" id="apd3"></div>
+      <div class="pin-display" id="admin-dots">
+        <div class="pin-dot"></div><div class="pin-dot"></div>
+        <div class="pin-dot"></div><div class="pin-dot"></div>
       </div>
       <div class="pin-pad">
         <div class="pk" onclick="adminPinKey('1')">1</div><div class="pk" onclick="adminPinKey('2')">2</div><div class="pk" onclick="adminPinKey('3')">3</div>
@@ -548,13 +548,13 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
     </div>
     <!-- Step 2c: tenant PIN -->
     <div id="login-step-tenant-pin" style="display:none">
-      <button class="auth-back" onclick="showLoginStep('tenant')">← Back</button>
+      <button class="auth-back" onclick="showLoginStep('login-step-tenant')">← Back</button>
       <div class="auth-logo-icon" style="background:linear-gradient(135deg,var(--accent),var(--accent-light))">🔒</div>
       <div class="auth-brand">Enter PIN</div>
       <div class="auth-sub" id="tenant-pin-sub">4-digit portal PIN</div>
-      <div class="pin-display">
-        <div class="pin-dot" id="tpd0"></div><div class="pin-dot" id="tpd1"></div>
-        <div class="pin-dot" id="tpd2"></div><div class="pin-dot" id="tpd3"></div>
+      <div class="pin-display" id="tenant-pin-dots">
+        <div class="pin-dot"></div><div class="pin-dot"></div>
+        <div class="pin-dot"></div><div class="pin-dot"></div>
       </div>
       <div class="pin-pad">
         <div class="pk" onclick="tenantPinKey('1')">1</div><div class="pk" onclick="tenantPinKey('2')">2</div><div class="pk" onclick="tenantPinKey('3')">3</div>
@@ -577,10 +577,10 @@ tbody tr:hover td{background:rgba(255,255,255,0.02)}
       </div>
       <div style="display:flex;align-items:center;gap:10px">
         <div class="t-nav" id="t-nav">
-          <button class="t-tab active" onclick="switchTenantTab('lease',this)">🏠 Lease</button>
-          <button class="t-tab" onclick="switchTenantTab('payments',this)">💰 Payments</button>
-          <button class="t-tab" onclick="switchTenantTab('maintenance',this)">🔧 Maintenance</button>
-          <button class="t-tab" onclick="switchTenantTab('notices',this)">📢 Notices</button>
+          <button class="t-tab active" data-tab="lease" onclick="switchTenantTab('lease',this)">🏠 Lease</button>
+          <button class="t-tab" data-tab="payments" onclick="switchTenantTab('payments',this)">💰 Payments</button>
+          <button class="t-tab" data-tab="maintenance" onclick="switchTenantTab('maintenance',this)">🔧 Maintenance</button>
+          <button class="t-tab" data-tab="notices" onclick="switchTenantTab('notices',this)">📢 Notices</button>
         </div>
         <button class="btn btn-secondary btn-sm" onclick="tenantLogout()">Logout</button>
       </div>
@@ -1756,12 +1756,12 @@ function getLicence(){ return DB.get('licence', null); }
 function saveLicence(obj){ DB.set('licence', obj); }
 
 function activateLicence(){
-  const key = document.getElementById('lic-key-input').value.trim().toUpperCase();
+  const key = document.getElementById('lic-input').value.trim().toUpperCase();
   const info = VALID_KEYS[key];
   if(!info){ showToast('Invalid licence key. Please try again.','error'); return; }
   if(new Date(info.expiry) < new Date()){ showToast('This licence key has expired.','error'); return; }
   saveLicence({ key, ...info, activatedAt: today() });
-  document.getElementById('lic-err').textContent='';
+  document.getElementById('lic-error').style.display='none';
   hideOverlay('overlay-licence');
   showToast(`Licence activated! ${info.tier} plan — up to ${info.maxProps===999?'unlimited':info.maxProps} properties.`);
   renderSettingsLicence();
@@ -1799,68 +1799,32 @@ let _pinCtx='', _pinBuf='', _pinConfirmBuf='', _pinStep=0;
 const PIN_LEN=4;
 
 function setupPinKey(k){
-  if(k==='⌫'){ _pinBuf=_pinBuf.slice(0,-1); }
-  else if(_pinBuf.length<PIN_LEN){ _pinBuf+=k; }
+  if(k==='DEL'||k==='⌫'){ _pinBuf=_pinBuf.slice(0,-1); }
+  else if(k!=='OK' && _pinBuf.length<PIN_LEN){ _pinBuf+=k; }
   updatePinDots('setup-dots', _pinBuf.length);
-  if(_pinBuf.length===PIN_LEN){
-    if(_pinStep===0){
-      _pinStep=1; _pinConfirmBuf='';
-      document.getElementById('setup-instruction').textContent='Confirm your PIN';
+  if(_pinBuf.length===PIN_LEN && _pinStep===0){
+    _pinStep=1; _pinConfirmBuf=_pinBuf; _pinBuf='';
+    document.getElementById('setup-step-label').textContent='Confirm your PIN';
+    clearPinDots('setup-dots');
+  } else if(_pinBuf.length===PIN_LEN && _pinStep===1){
+    if(_pinBuf===_pinConfirmBuf){
+      DB.set('adminPin', hashPin(_pinBuf));
+      _pinBuf=''; _pinStep=0;
+      hideOverlay('overlay-setup');
+      showOverlay('overlay-login');
+      showLoginStep('login-step-role');
+    } else {
+      showToast('PINs do not match. Try again.','error');
+      _pinBuf=''; _pinConfirmBuf=''; _pinStep=0;
+      document.getElementById('setup-step-label').textContent='Create a 4-digit admin PIN';
       clearPinDots('setup-dots');
-      const tmp=_pinBuf; _pinBuf='';
-      _pinConfirmBuf=tmp;
-      // swap: now buffer collects confirm
-      _pinStep=2;
-    } else if(_pinStep===2){
-      if(_pinBuf===_pinConfirmBuf){
-        DB.set('adminPin', hashPin(_pinBuf));
-        hideOverlay('overlay-setup');
-        showOverlay('overlay-login');
-        showLoginStep('login-step-role');
-      } else {
-        showToast('PINs do not match. Try again.','error');
-        _pinBuf=''; _pinConfirmBuf=''; _pinStep=0;
-        document.getElementById('setup-instruction').textContent='Create a 4-digit admin PIN';
-        clearPinDots('setup-dots');
-      }
-    }
-  }
-}
-
-// Confirm step helper — reset confirm buf to new input
-function setupPinKey(k){
-  const stored = DB.get('adminPin',null);
-  if(!stored){
-    // Setup flow: two-step
-    if(_pinStep===0||_pinStep===1){
-      if(k==='⌫'){ _pinBuf=_pinBuf.slice(0,-1); }
-      else if(_pinBuf.length<PIN_LEN){ _pinBuf+=k; }
-      updatePinDots('setup-dots', _pinBuf.length);
-      if(_pinBuf.length===PIN_LEN && _pinStep===0){
-        _pinStep=1; _pinConfirmBuf=_pinBuf; _pinBuf='';
-        document.getElementById('setup-instruction').textContent='Confirm your PIN';
-        clearPinDots('setup-dots');
-      } else if(_pinBuf.length===PIN_LEN && _pinStep===1){
-        if(_pinBuf===_pinConfirmBuf){
-          DB.set('adminPin', hashPin(_pinBuf));
-          _pinBuf=''; _pinStep=0;
-          hideOverlay('overlay-setup');
-          showOverlay('overlay-login');
-          showLoginStep('login-step-role');
-        } else {
-          showToast('PINs do not match. Try again.','error');
-          _pinBuf=''; _pinConfirmBuf=''; _pinStep=0;
-          document.getElementById('setup-instruction').textContent='Create a 4-digit admin PIN';
-          clearPinDots('setup-dots');
-        }
-      }
     }
   }
 }
 
 function adminPinKey(k){
-  if(k==='⌫'){ _pinBuf=_pinBuf.slice(0,-1); }
-  else if(_pinBuf.length<PIN_LEN){ _pinBuf+=k; }
+  if(k==='DEL'||k==='⌫'){ _pinBuf=_pinBuf.slice(0,-1); }
+  else if(k!=='OK' && _pinBuf.length<PIN_LEN){ _pinBuf+=k; }
   updatePinDots('admin-dots', _pinBuf.length);
   if(_pinBuf.length===PIN_LEN){
     const stored=DB.get('adminPin',null);
@@ -1876,11 +1840,11 @@ function adminPinKey(k){
 }
 
 function tenantPinKey(k){
-  if(k==='⌫'){ _pinBuf=_pinBuf.slice(0,-1); }
-  else if(_pinBuf.length<PIN_LEN){ _pinBuf+=k; }
+  if(k==='DEL'||k==='⌫'){ _pinBuf=_pinBuf.slice(0,-1); }
+  else if(k!=='OK' && _pinBuf.length<PIN_LEN){ _pinBuf+=k; }
   updatePinDots('tenant-pin-dots', _pinBuf.length);
   if(_pinBuf.length===PIN_LEN){
-    const phone=document.getElementById('tenant-phone-input').value.trim().replace(/\s+/g,'');
+    const phone=document.getElementById('tenant-login-phone').value.trim().replace(/\s+/g,'');
     const cred=data.tenantCreds.find(c=>c.phone.replace(/\s+/g,'')===phone && hashPin(_pinBuf)===c.pinHash);
     if(cred){
       const tenant=data.tenants.find(t=>t.id===cred.tenantId);
@@ -1894,7 +1858,7 @@ function tenantPinKey(k){
 }
 
 function tenantPhoneNext(){
-  const ph=document.getElementById('tenant-phone-input').value.trim();
+  const ph=document.getElementById('tenant-login-phone').value.trim();
   if(!ph){ showToast('Please enter your phone number.','error'); return; }
   const phone=ph.replace(/\s+/g,'');
   const cred=data.tenantCreds.find(c=>c.phone.replace(/\s+/g,'')===phone);
@@ -1926,7 +1890,7 @@ function forgotAdminPin(){
     hideOverlay('overlay-login');
     showOverlay('overlay-setup');
     _pinBuf=''; _pinStep=0;
-    document.getElementById('setup-instruction').textContent='Create a 4-digit admin PIN';
+    document.getElementById('setup-step-label').textContent='Create a 4-digit admin PIN';
     clearPinDots('setup-dots');
   }
 }
@@ -1935,7 +1899,7 @@ function startChangePin(){
   DB.set('adminPin',null);
   showOverlay('overlay-setup');
   _pinBuf=''; _pinStep=0;
-  document.getElementById('setup-instruction').textContent='Create a new 4-digit admin PIN';
+  document.getElementById('setup-step-label').textContent='Create a new 4-digit admin PIN';
   clearPinDots('setup-dots');
 }
 
@@ -1969,8 +1933,10 @@ function tenantLogout(){
   showLoginStep('login-step-role');
 }
 
-function switchTenantTab(tab){
-  document.querySelectorAll('.t-tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===tab));
+function switchTenantTab(tab, el){
+  document.querySelectorAll('.t-tab').forEach(t=>t.classList.remove('active'));
+  if(el) el.classList.add('active');
+  else { const b=document.querySelector(`.t-tab[data-tab="${tab}"]`); if(b) b.classList.add('active'); }
   const body = document.getElementById('t-body');
   if(tab==='lease') body.innerHTML = renderTenantLease();
   else if(tab==='payments') body.innerHTML = renderTenantPayments();
@@ -2023,7 +1989,7 @@ function renderTenantMaintenance(){
   const issues = data.maintenance.filter(m=>m.propertyId===t.propertyId && m.unit===t.unit);
   let html = '<div style="display:grid;gap:8px">';
   if(issues.length===0){ html+='<div style="color:var(--text3);text-align:center;padding:24px">No maintenance requests for your unit.</div>'; }
-  const sc={open:'var(--red)',in-progress':'var(--yellow)','resolved':'var(--green)'};
+  const sc={open:'var(--red)','in-progress':'var(--yellow)',resolved:'var(--green)'};
   issues.forEach(m=>{
     const col=m.status==='open'?'var(--red)':m.status==='in-progress'?'var(--yellow)':'var(--green)';
     html+=`<div class="t-card"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-weight:600">${m.title}</span><span style="color:${col};font-size:12px;text-transform:capitalize">${m.status}</span></div><div style="color:var(--text3);font-size:13px">${m.description}</div></div>`;
@@ -2272,7 +2238,7 @@ function initApp(){
   if(!hasPin){
     showOverlay('overlay-setup');
     _pinBuf=''; _pinStep=0;
-    document.getElementById('setup-instruction').textContent='Create a 4-digit admin PIN';
+    document.getElementById('setup-step-label').textContent='Create a 4-digit admin PIN';
     clearPinDots('setup-dots');
   } else {
     showOverlay('overlay-login');
