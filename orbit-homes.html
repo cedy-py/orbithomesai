@@ -2117,12 +2117,23 @@ const VALID_KEYS = {
   'OH-STARTER-TRIAL':     { tier:'Starter', maxProps:10,  expiry:'2026-06-30' },
 };
 
+const TIER_MAP = { STARTER:{ tier:'Starter', maxProps:10 }, PRO:{ tier:'Pro', maxProps:50 }, AGENCY:{ tier:'Agency', maxProps:999 } };
+
+function parseLicenceKey(key){
+  if(VALID_KEYS[key]) return VALID_KEYS[key];
+  // Match keys produced by the generator: OH-TIER-YEAR-6RAND or OH-TIER-YEAR-6RAND-SUFFIX
+  const m = key.match(/^OH-(STARTER|PRO|AGENCY)-(\d{4})-[A-Z0-9]{6}(-[A-Z0-9]+)?$/);
+  if(!m) return null;
+  const tInfo = TIER_MAP[m[1]];
+  return { ...tInfo, expiry:`${m[2]}-12-31` };
+}
+
 function getLicence(){ return DB.get('licence', null); }
 function saveLicence(obj){ DB.set('licence', obj); }
 
 function activateLicence(){
   const key = document.getElementById('lic-input').value.trim().toUpperCase();
-  const info = VALID_KEYS[key];
+  const info = parseLicenceKey(key);
   if(!info){ showToast('Invalid licence key. Please try again.','error'); return; }
   if(new Date(info.expiry) < new Date()){ showToast('This licence key has expired.','error'); return; }
   saveLicence({ key, ...info, activatedAt: today() });
